@@ -99,8 +99,20 @@
         .btn:disabled { background-color: #9CA3AF; color: #E5E7EB; cursor: not-allowed; box-shadow: none; }
         .btn-danger { background-color: var(--danger-color); }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); }
-        .btn-secondary { background-color: var(--card-background); color: var(--text-color); border-color: var(--border-color); }
-        .btn-secondary:hover:not(:disabled) { background-color: var(--background-color); }
+        
+        /* Update Style Button Secondary (Batal/Template) */
+        .btn-secondary { 
+            background-color: #FFFFFF; 
+            color: var(--text-color); 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .btn-secondary:hover:not(:disabled) { 
+            background-color: #F3F4F6; 
+            border-color: #D1D5DB;
+            color: #111827;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
         
         /* Card */
         .card {
@@ -282,11 +294,11 @@
     </div>
 
     <!-- Modals -->
-    <div id="mapel-modal" class="modal-overlay"><div class="modal-content"><form id="mapel-form"><div class="modal-header"><h3>Manajemen Mata Pelajaran</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="mapel-id"><div class="form-group"><label for="mapel-name">Nama Mata Pelajaran</label><input type="text" id="mapel-name" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary close-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
-    <div id="guru-modal" class="modal-overlay"><div class="modal-content"><form id="guru-form"><div class="modal-header"><h3>Manajemen Guru</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="guru-id"><div class="form-group"><label for="guru-nama">Nama Guru</label><input type="text" id="guru-nama" class="form-control" required></div><div class="form-group"><label for="guru-username">Username</label><input type="text" id="guru-username" class="form-control" required></div><div class="form-group"><label for="guru-password">Password</label><input type="text" id="guru-password" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary close-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
-    <div id="ujian-modal" class="modal-overlay"><div class="modal-content"><form id="ujian-form"><div class="modal-header"><h3>Manajemen Topik Ujian</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="ujian-id"><div class="form-group"><label for="ujian-name">Nama Topik Ujian</label><input type="text" id="ujian-name" class="form-control" required></div><div class="form-group"><label for="ujian-modal-ta-select">Tahun Ajaran</label><select id="ujian-modal-ta-select" class="form-control" required></select></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary close-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
-    <div id="akses-modal" class="modal-overlay"><div class="modal-content"><form id="akses-form"><div class="modal-header"><h3>Manajemen Akses</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="akses-guru-id"><p style="font-size: 1.1em; font-weight: 600;">Guru: <span id="akses-guru-nama"></span></p><div class="form-group"><label>Pilih Kelas & Mata Pelajaran yang dapat diakses:</label><div id="akses-list-container"></div></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary close-btn">Batal</button><button type="submit" class="btn">Simpan Akses</button></div></form></div></div>
-    <div id="confirm-modal" class="modal-overlay"><div class="modal-content" style="max-width: 400px; text-align: center;"><div class="modal-body"><h3 id="confirm-title">Konfirmasi</h3><p id="confirm-text"></p></div><div class="modal-actions" style="justify-content: center;"><button type="button" class="btn btn-secondary close-btn">Batal</button><button type="button" class="btn btn-danger" id="confirm-ok">Ya, Lanjutkan</button></div></div></div>
+    <div id="mapel-modal" class="modal-overlay"><div class="modal-content"><form id="mapel-form"><div class="modal-header"><h3>Manajemen Mata Pelajaran</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="mapel-id"><div class="form-group"><label for="mapel-name">Nama Mata Pelajaran</label><input type="text" id="mapel-name" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
+    <div id="guru-modal" class="modal-overlay"><div class="modal-content"><form id="guru-form"><div class="modal-header"><h3>Manajemen Guru</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="guru-id"><div class="form-group"><label for="guru-nama">Nama Guru</label><input type="text" id="guru-nama" class="form-control" required></div><div class="form-group"><label for="guru-username">Username</label><input type="text" id="guru-username" class="form-control" required></div><div class="form-group"><label for="guru-password">Password</label><input type="text" id="guru-password" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
+    <div id="ujian-modal" class="modal-overlay"><div class="modal-content"><form id="ujian-form"><div class="modal-header"><h3>Manajemen Topik Ujian</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="ujian-id"><div class="form-group"><label for="ujian-name">Nama Topik Ujian</label><input type="text" id="ujian-name" class="form-control" required></div><div class="form-group"><label for="ujian-modal-ta-select">Tahun Ajaran</label><select id="ujian-modal-ta-select" class="form-control" required></select></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
+    <div id="akses-modal" class="modal-overlay"><div class="modal-content"><form id="akses-form"><div class="modal-header"><h3>Manajemen Akses</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="akses-guru-id"><p style="font-size: 1.1em; font-weight: 600;">Guru: <span id="akses-guru-nama"></span></p><div class="form-group"><label>Pilih Kelas & Mata Pelajaran yang dapat diakses:</label><div id="akses-list-container"></div></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan Akses</button></div></form></div></div>
+    <div id="confirm-modal" class="modal-overlay"><div class="modal-content" style="max-width: 400px; text-align: center;"><div class="modal-body"><h3 id="confirm-title">Konfirmasi</h3><p id="confirm-text"></p></div><div class="modal-actions" style="justify-content: center;"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="button" class="btn btn-danger" id="confirm-ok">Ya, Lanjutkan</button></div></div></div>
 
     <div id="preview-modal" class="modal-overlay">
         <div class="modal-content">
@@ -710,7 +722,8 @@
     document.getElementById('csv-upload').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; Papa.parse(file, { header: false, skipEmptyLines: true, complete: async (results) => { showSpinner(); const newGurus = {}; for(let i = 1; i < results.data.length; i++) { const row = results.data[i]; if (row.length >= 4) { const guruData = { nama: row[1], username: row[2], password: row[3] }; const newGuruRef = push(ref(setupDb(), 'gurus')); newGurus[newGuruRef.key] = guruData; } } await update(ref(setupDb(), 'gurus'), newGurus); e.target.value = ''; hideSpinner(); alert(`${Object.keys(newGurus).length} guru berhasil ditambahkan.`); } }); });
 
     document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id.replace('-modal', '')); }));
-    document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay').id.replace('-modal', ''))));
+    // Updated listener to include modal-cancel-btn
+    document.querySelectorAll('.close-btn, .modal-cancel-btn').forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay').id.replace('-modal', ''))));
     
     document.getElementById('add-mapel-btn').addEventListener('click', () => { document.getElementById('mapel-form').reset(); delete document.getElementById('mapel-form').dataset.id; openModal('mapel'); });
     document.getElementById('empty-mapel-btn').addEventListener('click', () => window.app.emptyMapel());
@@ -747,4 +760,3 @@
 </script>
 </body>
 </html>
-
