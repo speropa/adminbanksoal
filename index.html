@@ -125,6 +125,9 @@
         .btn-danger { background-color: var(--danger-color); }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); }
         
+        .btn-success { background-color: var(--success-color); }
+        .btn-success:hover:not(:disabled) { background-color: var(--success-hover); }
+
         .btn-secondary { 
             background-color: var(--secondary-color); 
             color: white; 
@@ -191,27 +194,40 @@
         }
         .modal-content {
             background-color: var(--card-background); padding: 30px;
-            border-radius: 10px; width: 90%; max-width: 500px;
+            border-radius: 10px; width: 90%; max-width: 600px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             animation: zoomIn 0.3s ease-out;
-            overflow: hidden;
+            /* PERBAIKAN: Menghapus overflow: hidden agar dropdown tidak terpotong */
+            /* overflow: hidden; */ 
+            display: flex;
+            flex-direction: column;
         }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
         .modal-header { 
             display: flex; justify-content: space-between; align-items: center; 
             margin-bottom: 20px; 
+            flex-shrink: 0;
         }
         .modal-header h3 { margin: 0; font-size: 1.5rem; color: #2c3e50; }
         
         .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #95a5a6; transition: color 0.2s; }
         .close-btn:hover { color: #e74c3c; }
         
-        .modal-body { max-height: 70vh; overflow-y: auto; margin-bottom: 20px; }
+        .modal-body { 
+            max-height: 70vh; 
+            overflow-y: auto; 
+            margin-bottom: 20px; 
+            flex-grow: 1;
+            padding-right: 5px; /* Sedikit padding agar scrollbar tidak menempel konten */
+            /* Ensure overflow doesn't clip dropdowns if content is small */
+            min-height: 200px; 
+        }
         
         .modal-actions { 
             display: flex; justify-content: flex-end; gap: 10px; 
             padding-top: 20px; border-top: 1px solid #eee; 
+            flex-shrink: 0;
         }
         
         /* Forms */
@@ -263,27 +279,24 @@
             border: 1px solid #bdc3c7;
         }
         
-        /* Akses Management Styles (Modal) */
-        .access-item-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px; background: #f9f9f9; border: 1px solid #eee;
-            border-radius: 6px; margin-bottom: 8px;
-        }
-        .access-item-text { font-weight: 500; color: var(--text-color); }
-        .remove-access-btn {
-            background: #ecf0f1; color: var(--danger-color); border: none;
-            border-radius: 4px; width: 28px; height: 28px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+        /* Dynamic Access Row Styles */
+        .dynamic-access-row {
+            display: flex; gap: 10px; align-items: flex-end;
+            padding: 15px; background: #fff; border: 1px solid #e0e0e0;
+            border-radius: 8px; margin-bottom: 10px;
             transition: all 0.2s;
         }
-        .remove-access-btn:hover { background: var(--danger-color); color: white; }
+        .dynamic-access-row:hover { border-color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .dynamic-access-row .form-group { margin-bottom: 0; }
         
-        .add-access-container {
-            display: flex; gap: 10px; align-items: flex-end;
-            padding: 15px; background: #ebf5fb; border-radius: 8px;
-            border: 1px dashed var(--primary-color); margin-top: 15px;
+        .remove-row-btn {
+            background: #fee2e2; color: #b91c1c; border: none;
+            width: 42px; height: 42px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s;
+            flex-shrink: 0;
         }
-        .add-access-container .form-group { margin-bottom: 0; flex: 1; }
+        .remove-row-btn:hover { background: #fecaca; }
         
         /* Preview Modal Styles */
         #preview-modal .modal-content { 
@@ -346,8 +359,10 @@
             .nav-link svg { margin: 0 auto; }
             .nav-link { padding: 15px; }
             
-            .add-access-container { flex-direction: column; align-items: stretch; }
-            .add-access-container .btn { width: 100%; }
+            .dynamic-access-row { flex-direction: row; flex-wrap: wrap; }
+            .dynamic-access-row .form-group:first-child { width: 80px; }
+            .dynamic-access-row .form-group:nth-child(2) { width: calc(100% - 140px); flex: unset; }
+            
         }
 
     </style>
@@ -406,44 +421,29 @@
     <div id="guru-modal" class="modal-overlay"><div class="modal-content"><form id="guru-form"><div class="modal-header"><h3>Manajemen Guru</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="guru-id"><div class="form-group"><label for="guru-nama">Nama Guru</label><input type="text" id="guru-nama" class="form-control" required></div><div class="form-group"><label for="guru-username">Username</label><input type="text" id="guru-username" class="form-control" required></div><div class="form-group"><label for="guru-password">Password</label><input type="text" id="guru-password" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     <div id="ujian-modal" class="modal-overlay"><div class="modal-content"><form id="ujian-form"><div class="modal-header"><h3>Manajemen Topik Ujian</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="ujian-id"><div class="form-group"><label for="ujian-name">Nama Topik Ujian</label><input type="text" id="ujian-name" class="form-control" required></div><div class="form-group"><label for="ujian-modal-ta-select">Tahun Ajaran</label><select id="ujian-modal-ta-select" class="form-control" required></select></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     
-    <!-- REVERTED AKSES MODAL (Per Teacher) -->
+    <!-- NEW DYNAMIC ACCESS MODAL -->
     <div id="akses-modal" class="modal-overlay">
         <div class="modal-content">
             <form id="akses-form">
                 <div class="modal-header">
                     <h3 id="akses-modal-title">Atur Akses Guru</h3>
-                    <button type="button" class="close-btn">&times;</button>
+                    <div class="flex items-center gap-2">
+                         <!-- Tombol Tambah Akses (Hijau) -->
+                         <button type="button" class="btn btn-success" onclick="window.app.addTempAccessRow()" style="padding: 8px 15px; font-size: 0.85rem;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            Tambah
+                        </button>
+                        <button type="button" class="close-btn">&times;</button>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="akses-guru-id">
                     
-                    <!-- Existing Access List -->
-                    <label class="block mb-2 font-medium text-gray-700">Akses Saat Ini:</label>
-                    <div id="current-access-list" class="mb-4 max-h-40 overflow-y-auto border rounded p-2 bg-gray-50">
-                        <div class="text-sm text-gray-400 italic p-2">Belum ada akses.</div>
+                    <!-- Area untuk baris dinamis -->
+                    <div id="dynamic-access-list">
+                        <!-- Baris akses akan di-inject di sini via JS -->
                     </div>
                     
-                    <!-- Add New Access Section -->
-                    <div class="add-access-container">
-                        <div class="form-group">
-                            <label class="text-xs uppercase font-bold" style="color: #3498db;">Tambah Kelas</label>
-                            <select id="new-akses-kelas" class="form-control">
-                                <option value="7">Kelas 7</option>
-                                <option value="8">Kelas 8</option>
-                                <option value="9">Kelas 9</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="flex: 2;">
-                            <label class="text-xs uppercase font-bold" style="color: #3498db;">Mata Pelajaran</label>
-                            <select id="new-akses-mapel" class="form-control">
-                                <!-- Populated via JS -->
-                            </select>
-                        </div>
-                        <button type="button" id="btn-add-access-item" class="btn">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                            Tambah
-                        </button>
-                    </div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button>
@@ -735,62 +735,71 @@
         document.getElementById('akses-guru-id').value = guruId;
         document.getElementById('akses-modal-title').textContent = `Atur Akses - ${state.gurus[guruId].nama}`;
         
-        // Copy existing access to temp array to allow editing without immediate save
+        // Copy existing access to temp array 
         tempAccessList = JSON.parse(JSON.stringify(state.akses[guruId] || []));
         
-        renderModalAccessList();
-        populateMapelDropdown();
+        // If no access, provide one empty row to start
+        if (tempAccessList.length === 0) {
+            tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
+        }
         
+        renderModalAccessList();
         openModal('akses');
     };
     
-    function populateMapelDropdown() {
-        const select = document.getElementById('new-akses-mapel');
-        select.innerHTML = state.mapels.length 
-            ? state.mapels.map(m => `<option value="${m}">${m}</option>`).join('')
-            : '<option value="">Belum ada Mapel</option>';
-    }
-
     function renderModalAccessList() {
-        const container = document.getElementById('current-access-list');
-        if (tempAccessList.length === 0) {
-            container.innerHTML = '<div class="text-sm text-gray-400 italic p-2 text-center">Belum ada akses yang diberikan.</div>';
-            return;
-        }
+        const container = document.getElementById('dynamic-access-list');
+        const mapelOptions = state.mapels.map(m => `<option value="${m}">${m}</option>`).join('');
         
-        container.innerHTML = tempAccessList.map((item, idx) => `
-            <div class="access-item-row">
-                <span class="access-item-text">Kelas ${item.kelas} - ${item.mapel}</span>
-                <button type="button" class="remove-access-btn" onclick="window.app.removeTempAccess(${idx})">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+        container.innerHTML = tempAccessList.map((item, idx) => {
+            // Only show delete button if it's NOT the first row (idx > 0)
+            const showDelete = idx > 0;
+            
+            return `
+            <div class="dynamic-access-row">
+                <div class="form-group" style="flex: 0 0 auto; width: 80px;">
+                    <label class="text-xs uppercase font-bold" style="color: #3498db;">Kelas</label>
+                    <select class="form-control" style="text-align: center; padding-left: 5px; padding-right: 5px;"
+                        onchange="window.app.updateAccessRow(${idx}, 'kelas', this.value)">
+                        <option value="7" ${item.kelas === '7' ? 'selected' : ''}>7</option>
+                        <option value="8" ${item.kelas === '8' ? 'selected' : ''}>8</option>
+                        <option value="9" ${item.kelas === '9' ? 'selected' : ''}>9</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label class="text-xs uppercase font-bold" style="color: #3498db;">Mata Pelajaran</label>
+                    <select class="form-control"
+                        onchange="window.app.updateAccessRow(${idx}, 'mapel', this.value)">
+                        ${state.mapels.map(m => `<option value="${m}" ${item.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}
+                    </select>
+                </div>
+                ${showDelete ? `
+                <button type="button" class="remove-row-btn" onclick="window.app.removeTempAccess(${idx})" title="Hapus Baris">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>` : '<div style="width: 42px;"></div>'}
             </div>
-        `).join('');
+        `}).join('');
     }
     
-    // Helper for removing item from temp list inside modal
+    // Helper to update state from inputs
+    window.app.updateAccessRow = (index, field, value) => {
+        if (tempAccessList[index]) {
+            tempAccessList[index][field] = value;
+        }
+    };
+    
+    // Helper to add new row
+    window.app.addTempAccessRow = () => {
+        tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
+        renderModalAccessList();
+    };
+
+    // Helper for removing item 
     window.app.removeTempAccess = (index) => {
         tempAccessList.splice(index, 1);
         renderModalAccessList();
     };
     
-    // Helper for adding item to temp list inside modal
-    document.getElementById('btn-add-access-item').addEventListener('click', () => {
-        const mapel = document.getElementById('new-akses-mapel').value;
-        const kelas = document.getElementById('new-akses-kelas').value;
-        
-        if (!mapel) { alert("Mata Pelajaran kosong."); return; }
-        
-        // Check duplicate
-        const exists = tempAccessList.some(a => a.kelas == kelas && a.mapel == mapel);
-        if (exists) {
-            alert("Akses ini sudah ada dalam daftar.");
-            return;
-        }
-        
-        tempAccessList.push({ kelas, mapel });
-        renderModalAccessList();
-    });
 
     // 3. Handle Save (Save temp list to Firebase)
     document.getElementById('akses-form').addEventListener('submit', async (e) => {
@@ -799,8 +808,11 @@
         
         const guruId = document.getElementById('akses-guru-id').value;
         
+        // Filter out any invalid entries just in case (e.g., no mapel selected)
+        const validList = tempAccessList.filter(item => item.mapel && item.mapel.trim() !== '');
+
         try {
-            await set(ref(firebaseInstances['SETUP'].db, `akses/${guruId}`), tempAccessList);
+            await set(ref(firebaseInstances['SETUP'].db, `akses/${guruId}`), validList);
             closeModal('akses');
         } catch (err) {
             console.error("Gagal menyimpan akses:", err);
