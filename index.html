@@ -9,21 +9,30 @@
     <link href="https://css2.gg/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
+        /* --- KONFIGURASI WARNA DARI REFERENSI --- */
         :root {
-            --primary-color: #4338CA; /* Indigo 700 */
-            --primary-hover: #3730A3; /* Indigo 800 */
-            --primary-light: #EEF2FF; /* Indigo 50 */
-            --secondary-color: #6B7280; /* Gray 500 */
-            --secondary-hover: #4B5563; /* Gray 600 */
-            --success-color: #16A34A; /* Green 600 */
-            --success-hover: #15803D; /* Green 700 */
-            --danger-color: #DC2626; /* Red 600 */
-            --danger-hover: #B91C1C; /* Red 700 */
-            --background-color: #F9FAFB; /* Gray 50 */
+            /* Warna Utama (Biru Admin) */
+            --primary-color: #3498db; 
+            --primary-hover: #2980b9;
+            --primary-light: #ebf5fb; 
+            
+            /* Warna Sekunder (Abu-abu) */
+            --secondary-color: #95a5a6;
+            --secondary-hover: #7f8c8d;
+            
+            /* Warna Status */
+            --success-color: #27ae60; /* Hijau */
+            --success-hover: #219150;
+            --danger-color: #e74c3c; /* Merah */
+            --danger-hover: #c0392b;
+            --warning-color: #f39c12; /* Kuning/Oranye */
+            
+            /* Background & Text */
+            --background-color: #f4f7f6; /* Background Body dari referensi */
             --card-background: #FFFFFF;
-            --text-color: #111827; /* Gray 900 */
-            --text-light: #6B7280; /* Gray 500 */
-            --border-color: #E5E7EB; /* Gray 200 */
+            --text-color: #2c3e50; /* Warna teks utama (Dark Blue-Gray) */
+            --text-light: #7f8c8d;
+            --border-color: #bdc3c7; /* Border sedikit lebih gelap */
             --header-bg: #FFFFFF;
         }
 
@@ -46,24 +55,32 @@
         .top-header {
             background-color: var(--header-bg);
             padding: 0 32px;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #dcdcdc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             position: sticky; top: 0; z-index: 100;
         }
         .header-content { display: flex; align-items: center; max-width: 1400px; margin: 0 auto; }
-        .top-nav { display: flex; flex-grow: 1; overflow-x: auto; scrollbar-width: none; }
+        .top-nav { display: flex; flex-grow: 1; overflow-x: auto; scrollbar-width: none; gap: 5px; }
         .top-nav::-webkit-scrollbar { display: none; }
+        
         .nav-link {
             display: flex; align-items: center; gap: 10px;
-            padding: 20px 16px; text-decoration: none; color: var(--text-light);
-            border-bottom: 2px solid transparent; margin-bottom: -1px;
+            padding: 18px 16px; text-decoration: none; color: var(--text-light);
+            border-bottom: 3px solid transparent; margin-bottom: -1px;
             font-weight: 500; font-size: 0.95rem;
-            transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+            transition: all 0.2s ease;
             white-space: nowrap;
         }
-        .nav-link:hover { color: var(--primary-color); background-color: var(--primary-light); }
-        .nav-link.active { color: var(--primary-color); border-bottom-color: var(--primary-color); font-weight: 600; }
-        .nav-link svg { width: 20px; height: 20px; }
+        .nav-link:hover { 
+            color: var(--primary-color); 
+            background-color: rgba(52, 152, 219, 0.05); 
+        }
+        .nav-link.active { 
+            color: var(--primary-color); 
+            border-bottom-color: var(--primary-color); 
+            font-weight: 700; 
+        }
+        .nav-link svg { width: 18px; height: 18px; }
         
         /* Main Content Layout */
         .main-content { padding: 32px; max-width: 1400px; margin: 0 auto; }
@@ -76,140 +93,208 @@
             display: flex; flex-wrap: wrap; gap: 16px;
             justify-content: space-between; align-items: center;
             margin-bottom: 24px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
         }
-        .view-header h1 { margin: 0; font-size: 2rem; font-weight: 700; letter-spacing: -0.025em; }
-        .header-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .view-header h1 { 
+            margin: 0; font-size: 1.8rem; font-weight: 700; 
+            color: #2c3e50; /* Warna judul dari referensi */
+        }
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        /* Buttons */
+        /* Buttons - Disesuaikan dengan Referensi */
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 10px 20px; border: 1px solid transparent; border-radius: 8px;
+            padding: 10px 20px; border: none; border-radius: 6px;
             background-color: var(--primary-color); color: white;
-            font-size: 0.9rem; font-weight: 600; cursor: pointer;
+            font-size: 0.95rem; font-weight: 500; cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Shadow khas referensi */
         }
         .btn svg { width: 16px; height: 16px; }
         .btn:hover:not(:disabled) {
             background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px); /* Efek naik sedikit */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        .btn:disabled { background-color: #9CA3AF; color: #E5E7EB; cursor: not-allowed; box-shadow: none; }
+        .btn:active { transform: translateY(0); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        .btn:disabled { background-color: #bdc3c7; color: white; cursor: not-allowed; box-shadow: none; transform: none; }
+        
         .btn-danger { background-color: var(--danger-color); }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); }
         
-        /* Update Style Button Secondary (Batal/Template) */
         .btn-secondary { 
-            background-color: #FFFFFF; 
-            color: var(--text-color); 
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: var(--secondary-color); 
+            color: white; 
+            border: none;
         }
         .btn-secondary:hover:not(:disabled) { 
-            background-color: #F3F4F6; 
-            border-color: #D1D5DB;
-            color: #111827;
-            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+            background-color: var(--secondary-hover); 
+            color: white;
         }
         
         /* Card */
         .card {
-            background-color: var(--card-background); border-radius: 12px;
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px 0 rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
+            background-color: var(--card-background); border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow lebih lembut */
+            border: none; /* Hapus border garis, gunakan shadow saja seperti referensi */
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
-        /* Tables */
+        /* Tables - Disesuaikan dengan Referensi */
         .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
-        td { color: var(--text-light); font-size: 0.95rem; }
-        thead th { background-color: #F9FAFB; font-weight: 600; font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; }
-        tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover { background-color: var(--primary-light); }
-        .actions-cell { display: flex; gap: 12px; width: 100px; }
-        .actions-cell button { background: none; border: none; cursor: pointer; padding: 4px; border-radius: 50%; }
-        .actions-cell button:hover { background-color: #e5e7eb; }
-        .actions-cell button svg { width: 20px; height: 20px; color: var(--text-light); transition: color 0.2s; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        
+        th, td { 
+            padding: 12px 15px; 
+            text-align: left; 
+            border-bottom: 1px solid #e0e0e0; 
+            vertical-align: middle;
+        }
+        
+        thead th { 
+            background-color: #ecf0f1; /* Header abu-abu khas referensi */
+            color: #2c3e50; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        
+        tbody tr:nth-child(even) { background-color: #f9f9f9; } /* Zebra striping */
+        tbody tr:hover { background-color: #ebf5fb; } /* Hover baris */
+        
+        /* Action Buttons in Table (Small Circular/Icon buttons) */
+        .actions-cell { display: flex; gap: 8px; width: 100px; }
+        .actions-cell button { 
+            background: none; border: none; cursor: pointer; 
+            padding: 6px; border-radius: 50%; 
+            transition: background 0.2s, transform 0.2s;
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .actions-cell button:hover { background-color: #dfe6e9; transform: translateY(-1px); }
+        .actions-cell button svg { width: 18px; height: 18px; }
+        
+        /* Specific Colors for Action Icons */
+        .actions-cell button[title="Edit"] svg, .actions-cell button[onclick*="edit"] svg { color: var(--primary-color); }
+        .actions-cell button[title="Hapus"] svg, .actions-cell button[onclick*="delete"] svg { color: var(--danger-color); }
         
         /* Modals */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(17, 24, 39, 0.6); display: none;
+            background-color: rgba(0,0,0,0.6); display: none;
             justify-content: center; align-items: center; z-index: 1000;
             animation: fadeIn 0.3s ease;
         }
         .modal-content {
-            background-color: var(--card-background); padding: 0;
-            border-radius: 12px; width: 90%; max-width: 600px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            background-color: var(--card-background); padding: 30px;
+            border-radius: 10px; width: 90%; max-width: 500px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             animation: zoomIn 0.3s ease-out;
             overflow: hidden;
         }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; border-bottom: 1px solid var(--border-color); }
-        .modal-body { padding: 32px; }
-        .modal-header h3 { margin: 0; font-size: 1.25rem; }
-        .close-btn { background: none; border: none; font-size: 1.75rem; line-height: 1; cursor: pointer; color: var(--text-light); padding: 0; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; padding: 24px 32px; background-color: #F9FAFB; border-top: 1px solid var(--border-color); }
+        
+        .modal-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .modal-header h3 { margin: 0; font-size: 1.5rem; color: #2c3e50; }
+        
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #95a5a6; transition: color 0.2s; }
+        .close-btn:hover { color: #e74c3c; }
+        
+        .modal-body { max-height: 70vh; overflow-y: auto; margin-bottom: 20px; }
+        
+        .modal-actions { 
+            display: flex; justify-content: flex-end; gap: 10px; 
+            padding-top: 20px; border-top: 1px solid #eee; 
+        }
         
         /* Forms */
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: var(--text-color);}
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #34495e; font-size: 0.9rem;}
         .form-control {
-            width: 100%; padding: 10px 14px; border: 1px solid var(--border-color);
-            border-radius: 8px; font-size: 0.95rem; background-color: #fff;
-            color: var(--text-color); transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%; padding: 12px; border: 1px solid #ccc;
+            border-radius: 6px; font-size: 1rem; background-color: #fff;
+            color: #2c3e50; transition: border-color 0.3s, box-shadow 0.3s;
         }
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
             outline: none;
         }
         
+        /* Spinners & Loaders */
         #spinner-overlay, #processing-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--background-color); z-index: 9999;
+            background: rgba(255, 255, 255, 0.8); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        #processing-overlay { background-color: rgba(17, 24, 39, 0.7); }
+        #processing-overlay { background-color: rgba(44, 62, 80, 0.8); }
         .spinner {
-            width: 50px; height: 50px; border: 5px solid var(--border-color);
+            width: 40px; height: 40px; border: 5px solid rgba(0, 0, 0, 0.1);
             border-top: 5px solid var(--primary-color); border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s ease infinite;
         }
-        #spinner-text, #processing-text { margin-top: 15px; color: var(--text-light); font-weight: 500; }
+        #spinner-text, #processing-text { margin-top: 15px; color: #7f8c8d; font-weight: 600; }
         #processing-text { color: white; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .empty-state { text-align: center; padding: 64px 32px; color: var(--text-light); }
+        .empty-state { text-align: center; padding: 40px; color: #bdc3c7; font-style: italic; }
         
-        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        /* Toggle Switch (Selaras dengan referensi) */
+        .toggle-switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--success-color); }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary-color); }
         input:checked + .slider:before { transform: translateX(20px); }
         
-        .akses-tag { display: inline-block; background-color: #E5E7EB; color: #374151; padding: 3px 8px; border-radius: 5px; font-size: 0.8em; margin: 2px; }
-        #akses-list-container { border: 1px solid var(--border-color); border-radius: 8px; max-height: 350px; overflow-y: auto; }
-        .akses-list-item { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background-color 0.2s; }
-        .akses-list-item:last-child { border-bottom: none; }
-        .akses-list-item:hover { background-color: #F9FAFB; }
-        .akses-list-item input[type="checkbox"] { margin-right: 12px; width: 16px; height: 16px; accent-color: var(--primary-color); flex-shrink: 0; }
+        /* Tags */
+        .akses-tag { 
+            display: inline-flex; align-items: center; gap: 4px;
+            background-color: #ecf0f1; color: #2c3e50; 
+            padding: 4px 10px; border-radius: 15px; 
+            font-size: 0.85em; margin: 2px; font-weight: 600;
+            border: 1px solid #bdc3c7;
+        }
+        
+        /* Akses Management Styles (Modal) */
+        .access-item-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px; background: #f9f9f9; border: 1px solid #eee;
+            border-radius: 6px; margin-bottom: 8px;
+        }
+        .access-item-text { font-weight: 500; color: var(--text-color); }
+        .remove-access-btn {
+            background: #ecf0f1; color: var(--danger-color); border: none;
+            border-radius: 4px; width: 28px; height: 28px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .remove-access-btn:hover { background: var(--danger-color); color: white; }
+        
+        .add-access-container {
+            display: flex; gap: 10px; align-items: flex-end;
+            padding: 15px; background: #ebf5fb; border-radius: 8px;
+            border: 1px dashed var(--primary-color); margin-top: 15px;
+        }
+        .add-access-container .form-group { margin-bottom: 0; flex: 1; }
         
         /* Preview Modal Styles */
         #preview-modal .modal-content { 
             max-width: 95vw; max-height: 95vh; padding: 15px; 
-            overflow: auto; /* Ensure scrolling if content is too big */
+            overflow: hidden; /* Handle scroll in device wrapper */
+            display: flex; flex-direction: column;
         }
-        #preview-device-wrapper { transition: all 0.4s ease-in-out; position: relative; margin: 0 auto;}
+        #preview-device-wrapper { transition: all 0.4s ease-in-out; position: relative; margin: 0 auto; flex-grow: 1; overflow: hidden; }
         #preview-device-wrapper.is-mobile {
             width: 375px; height: 812px; background-color: #1c1c1e; border-radius: 50px; padding: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 0 2px #333;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 0 2px #333; margin-bottom: 10px;
         }
         #preview-device-wrapper.is-mobile::before {
             content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
@@ -217,31 +302,31 @@
         }
         #preview-device-wrapper.is-desktop {
             width: 90vw; max-width: 1100px; height: 75vh; background-color: #333;
-            border-radius: 10px; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            border-radius: 10px; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.25); margin-bottom: 10px;
         }
         .phone-screen {
-            background-color: var(--card-background); color: var(--text-color);
+            background-color: white; color: #333;
             width: 100%; height: 100%; overflow-y: auto; padding: 25px 15px; box-sizing: border-box;
         }
         #preview-device-wrapper.is-mobile .phone-screen { border-radius: 38px; }
         #preview-device-wrapper.is-desktop .phone-screen { border-radius: 5px; }
-        .preview-soal-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed var(--border-color); }
+        .preview-soal-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
         .preview-soal-item:last-child { border-bottom: none; }
-        .preview-soal-item h3 { margin: 0 0 15px 0; font-size: 1.1em; }
+        .preview-soal-item h3 { margin: 0 0 15px 0; font-size: 1.1em; color: var(--primary-color); }
         .preview-soal-item .pertanyaan { line-height: 1.6; margin-bottom: 20px; word-wrap: break-word; }
         .preview-soal-item img { max-width: 100% !important; height: auto !important; border-radius: 8px; }
         
         .preview-option-item {
             display: flex; align-items: flex-start; gap: 12px;
-            padding: 12px 16px; border: 1px solid var(--border-color);
-            border-radius: 12px; margin-bottom: 12px; background-color: var(--background-color);
+            padding: 12px 16px; border: 1px solid #e0e0e0;
+            border-radius: 6px; margin-bottom: 10px; background-color: #f9f9f9;
         }
         .option-letter {
             display: flex; justify-content: center; align-items: center;
             width: 24px; height: 24px; flex-shrink: 0;
-            background-color: #fff; border: 1px solid var(--border-color);
+            background-color: var(--primary-color); border: none;
             border-radius: 50%; font-weight: 600; font-size: 0.9em;
-            color: var(--text-color);
+            color: white;
         }
         .option-text { word-wrap: break-word; flex-grow: 1; }
         
@@ -252,14 +337,17 @@
         /* Responsive Styles */
         @media (max-width: 768px) {
             .top-header { padding: 0 15px; }
-            .main-content { padding: 20px; }
+            .main-content { padding: 15px; }
             .view-header h1 { font-size: 1.5em; }
-            .modal-content { width: 95%; }
+            .modal-content { width: 95%; padding: 20px; }
             .header-actions .btn span { display: none; }
             .header-actions .btn { padding: 10px; }
             .nav-link span { display: none; }
             .nav-link svg { margin: 0 auto; }
             .nav-link { padding: 15px; }
+            
+            .add-access-container { flex-direction: column; align-items: stretch; }
+            .add-access-container .btn { width: 100%; }
         }
 
     </style>
@@ -288,7 +376,27 @@
                 <div class="view-header"><h1>Manajemen Topik Ujian</h1><div class="header-actions"><button class="btn" id="add-ujian-btn"><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg><span>Tambah Topik</span></button></div></div>
                 <div class="card"><div class="table-wrapper"><table><thead><tr><th style="width: 50px;">No</th><th>Topik Ujian</th><th>Tahun Ajaran</th><th style="width: 100px;">Status</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="ujian-table-body"></tbody></table></div></div>
             </div>
-            <div id="akses-guru-view" class="content-view"><div class="view-header"><h1>Manajemen Akses Guru</h1></div><div class="card"><div class="table-wrapper"><table><thead><tr><th style="width: 50px;">No</th><th>Nama Guru</th><th>Akses Diberikan</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="akses-table-body"></tbody></table></div></div></div>
+            
+            <!-- REVERTED AKSES GURU VIEW (TEACHER CENTRIC) -->
+            <div id="akses-guru-view" class="content-view">
+                <div class="view-header"><h1>Manajemen Akses Guru</h1></div>
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">No</th>
+                                    <th>Nama Guru</th>
+                                    <th>Akses Kelas & Mapel</th>
+                                    <th style="width: 100px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="akses-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
             <div id="bank-soal-view" class="content-view"><div class="view-header"><h1>Tinjauan Bank Soal</h1></div><div class="card"><div class="table-wrapper"><table><thead><tr><th>Tahun Ajaran</th><th>Ujian</th><th>Kelas</th><th>Mata Pelajaran</th><th>Jml Soal</th><th>Update Terakhir</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="bank-soal-table-body"></tbody></table></div></div></div>
         </main>
     </div>
@@ -297,7 +405,54 @@
     <div id="mapel-modal" class="modal-overlay"><div class="modal-content"><form id="mapel-form"><div class="modal-header"><h3>Manajemen Mata Pelajaran</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="mapel-id"><div class="form-group"><label for="mapel-name">Nama Mata Pelajaran</label><input type="text" id="mapel-name" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     <div id="guru-modal" class="modal-overlay"><div class="modal-content"><form id="guru-form"><div class="modal-header"><h3>Manajemen Guru</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="guru-id"><div class="form-group"><label for="guru-nama">Nama Guru</label><input type="text" id="guru-nama" class="form-control" required></div><div class="form-group"><label for="guru-username">Username</label><input type="text" id="guru-username" class="form-control" required></div><div class="form-group"><label for="guru-password">Password</label><input type="text" id="guru-password" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     <div id="ujian-modal" class="modal-overlay"><div class="modal-content"><form id="ujian-form"><div class="modal-header"><h3>Manajemen Topik Ujian</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="ujian-id"><div class="form-group"><label for="ujian-name">Nama Topik Ujian</label><input type="text" id="ujian-name" class="form-control" required></div><div class="form-group"><label for="ujian-modal-ta-select">Tahun Ajaran</label><select id="ujian-modal-ta-select" class="form-control" required></select></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
-    <div id="akses-modal" class="modal-overlay"><div class="modal-content"><form id="akses-form"><div class="modal-header"><h3>Manajemen Akses</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="akses-guru-id"><p style="font-size: 1.1em; font-weight: 600;">Guru: <span id="akses-guru-nama"></span></p><div class="form-group"><label>Pilih Kelas & Mata Pelajaran yang dapat diakses:</label><div id="akses-list-container"></div></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan Akses</button></div></form></div></div>
+    
+    <!-- REVERTED AKSES MODAL (Per Teacher) -->
+    <div id="akses-modal" class="modal-overlay">
+        <div class="modal-content">
+            <form id="akses-form">
+                <div class="modal-header">
+                    <h3 id="akses-modal-title">Atur Akses Guru</h3>
+                    <button type="button" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="akses-guru-id">
+                    
+                    <!-- Existing Access List -->
+                    <label class="block mb-2 font-medium text-gray-700">Akses Saat Ini:</label>
+                    <div id="current-access-list" class="mb-4 max-h-40 overflow-y-auto border rounded p-2 bg-gray-50">
+                        <div class="text-sm text-gray-400 italic p-2">Belum ada akses.</div>
+                    </div>
+                    
+                    <!-- Add New Access Section -->
+                    <div class="add-access-container">
+                        <div class="form-group">
+                            <label class="text-xs uppercase font-bold" style="color: #3498db;">Tambah Kelas</label>
+                            <select id="new-akses-kelas" class="form-control">
+                                <option value="7">Kelas 7</option>
+                                <option value="8">Kelas 8</option>
+                                <option value="9">Kelas 9</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex: 2;">
+                            <label class="text-xs uppercase font-bold" style="color: #3498db;">Mata Pelajaran</label>
+                            <select id="new-akses-mapel" class="form-control">
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+                        <button type="button" id="btn-add-access-item" class="btn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            Tambah
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button>
+                    <button type="submit" class="btn">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="confirm-modal" class="modal-overlay"><div class="modal-content" style="max-width: 400px; text-align: center;"><div class="modal-body"><h3 id="confirm-title">Konfirmasi</h3><p id="confirm-text"></p></div><div class="modal-actions" style="justify-content: center;"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="button" class="btn btn-danger" id="confirm-ok">Ya, Lanjutkan</button></div></div></div>
 
     <div id="preview-modal" class="modal-overlay">
@@ -306,7 +461,7 @@
                 <div id="preview-screen" class="phone-screen"></div>
             </div>
             <div class="preview-controls">
-                <button id="preview-mobile-btn" class="btn btn-primary active">Ponsel</button>
+                <button id="preview-mobile-btn" class="btn active">Ponsel</button>
                 <button id="preview-desktop-btn" class="btn btn-secondary">Desktop</button>
                 <button id="preview-close-btn" class="btn btn-danger">Tutup</button>
             </div>
@@ -331,7 +486,9 @@
     };
     let firebaseInstances = {};
     let state = { mapels: [], gurus: {}, ujians: {}, akses: {}, bankSoal: [] };
+    // activeAksesKelas removed as we reverted to teacher list
     let githubToken = null;
+    let tempAccessList = []; // Temporary storage for modal editing
 
     // --- UI ELEMENTS ---
     const spinnerOverlay = document.getElementById('spinner-overlay');
@@ -536,27 +693,123 @@
             </td></tr>`).join('') : `<tr><td colspan="5" class="empty-state">Belum ada topik ujian.</td></tr>`;
     }
     
+    // --- REVERTED AKSES LOGIC (PER TEACHER) ---
+    
+    // 1. Render Table Listing Teachers
     function renderAksesTable() {
         const tbody = document.getElementById('akses-table-body');
         const sortedGuruIds = getSortedGuruIds();
-        tbody.innerHTML = sortedGuruIds.length ? sortedGuruIds.map((id, i) => {
-            const aksesGuru = state.akses[id] || [];
-            let aksesSummary = 'Belum diatur';
-            if (aksesGuru.length > 0) {
-                const grouped = aksesGuru.reduce((acc, { kelas, mapel }) => {
-                    if (!acc[kelas]) acc[kelas] = [];
-                    acc[kelas].push(mapel);
-                    return acc;
-                }, {});
-                aksesSummary = Object.keys(grouped).sort().map(kelas => 
-                    `<div><strong>Kelas ${kelas}:</strong> ${grouped[kelas].map(m => `<span class="akses-tag">${m}</span>`).join(' ')}</div>`
-                ).join('');
-            }
-            return `<tr><td>${i + 1}</td><td>${state.gurus[id].nama}</td><td>${aksesSummary}</td><td class="actions-cell">
-                <button onclick="window.app.editAkses('${id}')" title="Edit Akses"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button>
-            </td></tr>`
-        }).join('') : `<tr><td colspan="4" class="empty-state">Tambahkan guru terlebih dahulu.</td></tr>`;
+        
+        if (sortedGuruIds.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Belum ada data guru.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = sortedGuruIds.map((guruId, i) => {
+            const accessList = state.akses[guruId] || [];
+            
+            // Create badges for existing access
+            // Sort by Kelas then Mapel for neatness
+            accessList.sort((a,b) => a.kelas - b.kelas || a.mapel.localeCompare(b.mapel));
+            
+            const accessBadges = accessList.length > 0
+                ? accessList.map(a => `<span class="akses-tag">Kelas ${a.kelas}: ${a.mapel}</span>`).join(' ')
+                : '<span style="color: #95a5a6; font-style: italic;">Belum ada akses</span>';
+
+            return `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><strong>${state.gurus[guruId].nama}</strong></td>
+                    <td style="white-space: normal;">${accessBadges}</td>
+                    <td class="actions-cell">
+                        <button onclick="window.app.editAksesGuru('${guruId}')" title="Edit Akses"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     }
+
+    // 2. Handle Edit Click (Open Modal for ONE teacher)
+    window.app = window.app || {};
+    window.app.editAksesGuru = (guruId) => {
+        document.getElementById('akses-guru-id').value = guruId;
+        document.getElementById('akses-modal-title').textContent = `Atur Akses - ${state.gurus[guruId].nama}`;
+        
+        // Copy existing access to temp array to allow editing without immediate save
+        tempAccessList = JSON.parse(JSON.stringify(state.akses[guruId] || []));
+        
+        renderModalAccessList();
+        populateMapelDropdown();
+        
+        openModal('akses');
+    };
+    
+    function populateMapelDropdown() {
+        const select = document.getElementById('new-akses-mapel');
+        select.innerHTML = state.mapels.length 
+            ? state.mapels.map(m => `<option value="${m}">${m}</option>`).join('')
+            : '<option value="">Belum ada Mapel</option>';
+    }
+
+    function renderModalAccessList() {
+        const container = document.getElementById('current-access-list');
+        if (tempAccessList.length === 0) {
+            container.innerHTML = '<div class="text-sm text-gray-400 italic p-2 text-center">Belum ada akses yang diberikan.</div>';
+            return;
+        }
+        
+        container.innerHTML = tempAccessList.map((item, idx) => `
+            <div class="access-item-row">
+                <span class="access-item-text">Kelas ${item.kelas} - ${item.mapel}</span>
+                <button type="button" class="remove-access-btn" onclick="window.app.removeTempAccess(${idx})">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        `).join('');
+    }
+    
+    // Helper for removing item from temp list inside modal
+    window.app.removeTempAccess = (index) => {
+        tempAccessList.splice(index, 1);
+        renderModalAccessList();
+    };
+    
+    // Helper for adding item to temp list inside modal
+    document.getElementById('btn-add-access-item').addEventListener('click', () => {
+        const mapel = document.getElementById('new-akses-mapel').value;
+        const kelas = document.getElementById('new-akses-kelas').value;
+        
+        if (!mapel) { alert("Mata Pelajaran kosong."); return; }
+        
+        // Check duplicate
+        const exists = tempAccessList.some(a => a.kelas == kelas && a.mapel == mapel);
+        if (exists) {
+            alert("Akses ini sudah ada dalam daftar.");
+            return;
+        }
+        
+        tempAccessList.push({ kelas, mapel });
+        renderModalAccessList();
+    });
+
+    // 3. Handle Save (Save temp list to Firebase)
+    document.getElementById('akses-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showProcessing("Menyimpan akses...");
+        
+        const guruId = document.getElementById('akses-guru-id').value;
+        
+        try {
+            await set(ref(firebaseInstances['SETUP'].db, `akses/${guruId}`), tempAccessList);
+            closeModal('akses');
+        } catch (err) {
+            console.error("Gagal menyimpan akses:", err);
+            alert("Terjadi kesalahan saat menyimpan data.");
+        } finally {
+            hideProcessing();
+        }
+    });
+    
     
     function renderBankSoalTable() {
         const tbody = document.getElementById('bank-soal-table-body');
@@ -586,7 +839,8 @@
         openModal('confirm');
     }
 
-    window.app = {
+    // Append other window.app functions
+    Object.assign(window.app, {
         editMapel: (index) => { document.getElementById('mapel-form').dataset.id = index; document.getElementById('mapel-name').value = state.mapels[index]; openModal('mapel'); },
         deleteMapel: (index) => showConfirmation('Hapus Mapel', `Yakin ingin menghapus mapel "${state.mapels[index]}"?`, async () => { showSpinner(); let updatedMapels = [...state.mapels]; updatedMapels.splice(index, 1); await set(ref(firebaseInstances['SETUP'].db, 'customMapels'), updatedMapels); hideSpinner(); }),
         emptyMapel: () => showConfirmation('Kosongkan Mapel', 'Yakin ingin mengosongkan SEMUA data mata pelajaran? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); await remove(ref(firebaseInstances['SETUP'].db, 'customMapels')); hideSpinner(); }),
@@ -596,8 +850,7 @@
         editUjian: (tahunAjaran, id) => { const ujian = state.ujians[tahunAjaran][id]; const form = document.getElementById('ujian-form'); form.dataset.id = id; form.querySelector('#ujian-name').value = ujian.name; document.getElementById('ujian-modal-ta-select').value = tahunAjaran.replace('-','/'); openModal('ujian'); },
         deleteUjian: (tahunAjaran, id) => showConfirmation('Hapus Ujian', `Yakin ingin menghapus topik ujian "${state.ujians[tahunAjaran][id].name}"?`, async () => { showSpinner(); await remove(ref(firebaseInstances['SETUP'].db, `customUjians/${tahunAjaran}/${id}`)); hideSpinner(); }),
         toggleUjianStatus: async (tahunAjaran, id) => { const currentStatus = state.ujians[tahunAjaran][id].active; await update(ref(firebaseInstances['SETUP'].db, `customUjians/${tahunAjaran}/${id}`), { active: !currentStatus }); },
-        editAkses: (id) => { document.getElementById('akses-guru-id').value = id; document.getElementById('akses-guru-nama').textContent = state.gurus[id].nama; const container = document.getElementById('akses-list-container'); const aksesGuru = state.akses[id] || []; const kelas = [7, 8, 9]; let allCombinations = []; kelas.forEach(k => { state.mapels.forEach(m => allCombinations.push({ kelas: k, mapel: m })); }); if (state.mapels.length === 0) { container.innerHTML = '<div class="empty-state" style="padding: 20px;">Tambahkan mata pelajaran terlebih dahulu.</div>'; } else { container.innerHTML = allCombinations.map(combo => ` <label class="akses-list-item"> <input type="checkbox" value="${combo.kelas}-${combo.mapel}" ${aksesGuru.some(a => a.kelas == combo.kelas && a.mapel === combo.mapel) ? 'checked' : ''}> Kelas ${combo.kelas} - ${combo.mapel} </label> `).join(''); } openModal('akses'); },
-
+        
         previewBankSoal: async (bank) => {
             showProcessing('Memuat data soal...');
             const dbPath = `ujian/${bank.tahunAjaran.replace('/','-')}/${bank.ujian.replace(/\s/g,'-')}/Kelas-${bank.kelas}/${bank.mapel.replace(/\s/g,'-')}`;
@@ -618,7 +871,7 @@
                         const optionLabels = ['A', 'B', 'C', 'D'];
                         const optionsHTML = [s.pilihanA, s.pilihanB, s.pilihanC, s.pilihanD].map((opt, index) => `
                             <div class="preview-option-item">
-                                <span class="option-letter">${optionLabels[index]}</span>
+                                <button class="option-letter">${optionLabels[index]}</button>
                                 <div class="option-text">${opt}</div>
                             </div>
                         `).join('');
@@ -646,7 +899,7 @@
         deleteBankSoal: (bank) => {
             showConfirmation('Hapus Bank Soal', `Yakin ingin menghapus bank soal untuk:\nMapel: ${bank.mapel}, Kelas: ${bank.kelas}, Ujian: ${bank.ujian}?\nTindakan ini akan menghapus data soal dan semua gambar terkait. TIDAK DAPAT DIBATALKAN.`, () => executeDeleteBankSoal(bank));
         }
-    };
+    });
 
     async function executeDeleteBankSoal(bank) {
         showProcessing('Memulai proses penghapusan...');
@@ -716,7 +969,7 @@
     document.getElementById('mapel-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const name = document.getElementById('mapel-name').value.trim(); let updatedMapels = [...state.mapels]; if (id) { updatedMapels[id] = name; } else { updatedMapels.push(name); } await set(ref(setupDb(), 'customMapels'), updatedMapels); closeModal('mapel'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
     document.getElementById('guru-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const guruData = { nama: document.getElementById('guru-nama').value, username: document.getElementById('guru-username').value, password: document.getElementById('guru-password').value, }; const targetRef = id ? ref(setupDb(), `gurus/${id}`) : push(ref(setupDb(), 'gurus')); await set(targetRef, guruData); closeModal('guru'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
     document.getElementById('ujian-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const tahunAjaran = document.getElementById('ujian-modal-ta-select').value.replace('/', '-'); const ujianData = { name: document.getElementById('ujian-name').value, active: id && state.ujians[tahunAjaran] && state.ujians[tahunAjaran][id] ? state.ujians[tahunAjaran][id].active : true, }; const targetRef = id ? ref(setupDb(), `customUjians/${tahunAjaran}/${id}`) : push(ref(setupDb(), `customUjians/${tahunAjaran}`)); await set(targetRef, ujianData); closeModal('ujian'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
-    document.getElementById('akses-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const guruId = document.getElementById('akses-guru-id').value; const checkboxes = document.querySelectorAll('#akses-list-container input:checked'); const newAkses = Array.from(checkboxes).map(cb => { const [kelas, mapel] = cb.value.split(/-(.+)/); return { kelas, mapel }; }); await set(ref(setupDb(), `akses/${guruId}`), newAkses); closeModal('akses'); hideSpinner(); });
+    // REMOVED OLD AKSES LISTENER, MOVED TO LOGIC ABOVE
     
     document.getElementById('upload-csv-btn').addEventListener('click', () => document.getElementById('csv-upload').click());
     document.getElementById('csv-upload').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; Papa.parse(file, { header: false, skipEmptyLines: true, complete: async (results) => { showSpinner(); const newGurus = {}; for(let i = 1; i < results.data.length; i++) { const row = results.data[i]; if (row.length >= 4) { const guruData = { nama: row[1], username: row[2], password: row[3] }; const newGuruRef = push(ref(setupDb(), 'gurus')); newGurus[newGuruRef.key] = guruData; } } await update(ref(setupDb(), 'gurus'), newGurus); e.target.value = ''; hideSpinner(); alert(`${Object.keys(newGurus).length} guru berhasil ditambahkan.`); } }); });
@@ -736,8 +989,8 @@
     const previewMobileBtn = document.getElementById('preview-mobile-btn');
     const previewDesktopBtn = document.getElementById('preview-desktop-btn');
     document.getElementById('preview-close-btn').addEventListener('click', () => closeModal('preview'));
-    previewMobileBtn.addEventListener('click', () => { previewDeviceWrapper.classList.add('is-mobile'); previewDeviceWrapper.classList.remove('is-desktop'); previewMobileBtn.classList.add('active', 'btn-primary'); previewMobileBtn.classList.remove('btn-secondary'); previewDesktopBtn.classList.remove('active', 'btn-primary'); previewDesktopBtn.classList.add('btn-secondary'); });
-    previewDesktopBtn.addEventListener('click', () => { previewDeviceWrapper.classList.add('is-desktop'); previewDeviceWrapper.classList.remove('is-mobile'); previewDesktopBtn.classList.add('active', 'btn-primary'); previewDesktopBtn.classList.remove('btn-secondary'); previewMobileBtn.classList.remove('active', 'btn-primary'); previewMobileBtn.classList.add('btn-secondary'); });
+    previewMobileBtn.addEventListener('click', () => { previewDeviceWrapper.classList.add('is-mobile'); previewDeviceWrapper.classList.remove('is-desktop'); previewMobileBtn.classList.add('active'); previewMobileBtn.classList.remove('btn-secondary'); previewDesktopBtn.classList.remove('active'); previewDesktopBtn.classList.add('btn-secondary'); });
+    previewDesktopBtn.addEventListener('click', () => { previewDeviceWrapper.classList.add('is-desktop'); previewDeviceWrapper.classList.remove('is-mobile'); previewDesktopBtn.classList.add('active'); previewDesktopBtn.classList.remove('btn-secondary'); previewMobileBtn.classList.remove('active'); previewMobileBtn.classList.add('btn-secondary'); });
 
 
     window.addEventListener('hashchange', navigate);
