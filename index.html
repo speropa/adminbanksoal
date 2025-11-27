@@ -197,8 +197,6 @@
             border-radius: 10px; width: 90%; max-width: 600px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             animation: zoomIn 0.3s ease-out;
-            /* PERBAIKAN: Menghapus overflow: hidden agar dropdown tidak terpotong */
-            /* overflow: hidden; */ 
             display: flex;
             flex-direction: column;
         }
@@ -219,8 +217,7 @@
             overflow-y: auto; 
             margin-bottom: 20px; 
             flex-grow: 1;
-            padding-right: 5px; /* Sedikit padding agar scrollbar tidak menempel konten */
-            /* Ensure overflow doesn't clip dropdowns if content is small */
+            padding-right: 5px; 
             min-height: 200px; 
         }
         
@@ -301,7 +298,7 @@
         /* Preview Modal Styles */
         #preview-modal .modal-content { 
             max-width: 95vw; max-height: 95vh; padding: 15px; 
-            overflow: hidden; /* Handle scroll in device wrapper */
+            overflow: hidden; 
             display: flex; flex-direction: column;
         }
         #preview-device-wrapper { transition: all 0.4s ease-in-out; position: relative; margin: 0 auto; flex-grow: 1; overflow: hidden; }
@@ -392,7 +389,6 @@
                 <div class="card"><div class="table-wrapper"><table><thead><tr><th style="width: 50px;">No</th><th>Topik Ujian</th><th>Tahun Ajaran</th><th style="width: 100px;">Status</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="ujian-table-body"></tbody></table></div></div>
             </div>
             
-            <!-- REVERTED AKSES GURU VIEW (TEACHER CENTRIC) -->
             <div id="akses-guru-view" class="content-view">
                 <div class="view-header"><h1>Manajemen Akses Guru</h1></div>
                 <div class="card">
@@ -421,14 +417,12 @@
     <div id="guru-modal" class="modal-overlay"><div class="modal-content"><form id="guru-form"><div class="modal-header"><h3>Manajemen Guru</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="guru-id"><div class="form-group"><label for="guru-nama">Nama Guru</label><input type="text" id="guru-nama" class="form-control" required></div><div class="form-group"><label for="guru-username">Username</label><input type="text" id="guru-username" class="form-control" required></div><div class="form-group"><label for="guru-password">Password</label><input type="text" id="guru-password" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     <div id="ujian-modal" class="modal-overlay"><div class="modal-content"><form id="ujian-form"><div class="modal-header"><h3>Manajemen Topik Ujian</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="ujian-id"><div class="form-group"><label for="ujian-name">Nama Topik Ujian</label><input type="text" id="ujian-name" class="form-control" required></div><div class="form-group"><label for="ujian-modal-ta-select">Tahun Ajaran</label><select id="ujian-modal-ta-select" class="form-control" required></select></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     
-    <!-- NEW DYNAMIC ACCESS MODAL -->
     <div id="akses-modal" class="modal-overlay">
         <div class="modal-content">
             <form id="akses-form">
                 <div class="modal-header">
                     <h3 id="akses-modal-title">Atur Akses Guru</h3>
                     <div class="flex items-center gap-2">
-                         <!-- Tombol Tambah Akses (Hijau) -->
                          <button type="button" class="btn btn-success" onclick="window.app.addTempAccessRow()" style="padding: 8px 15px; font-size: 0.85rem;">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                             Tambah
@@ -438,12 +432,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="akses-guru-id">
-                    
-                    <!-- Area untuk baris dinamis -->
-                    <div id="dynamic-access-list">
-                        <!-- Baris akses akan di-inject di sini via JS -->
-                    </div>
-                    
+                    <div id="dynamic-access-list"></div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button>
@@ -470,25 +459,25 @@
 
 
 <script type="module">
-    import { initializeApp, getApp, getApps } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
     import { getDatabase, ref, set, onValue, push, remove, update, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    // --- CONFIG & STATE ---
-    const firebaseConfigs = {
-        '7ABC': { apiKey: "AIzaSyBAKwT7JY_HGnvK6h3u30-dfgRPXfef8l8", authDomain: "abc-a13ea.firebaseapp.com", databaseURL: "https://abc-a13ea-default-rtdb.firebaseio.com", projectId: "abc-a13ea" },
-        '7DEF': { apiKey: "AIzaSyBkhBZw3oADXUAJ9FXY9-g7XBsSmQhzZVk", authDomain: "def-ab5ee.firebaseapp.com", databaseURL: "https://def-ab5ee-default-rtdb.firebaseio.com", projectId: "def-ab5ee" },
-        '8ABC': { apiKey: "AIzaSyAwilwwwEJ2MAdSf09BotxNH-z6RiXaHXY", authDomain: "abc-43e73.firebaseapp.com", databaseURL: "https://abc-43e73-default-rtdb.firebaseio.com", projectId: "abc-43e73" },
-        '8DEF': { apiKey: "AIzaSyBeCI57lmZ4-8DAKYJ7nvYjnXOfvy0vqrk", authDomain: "def-efcb2.firebaseapp.com", databaseURL: "https://def-efcb2-default-rtdb.firebaseio.com", projectId: "def-efcb2" },
-        '9ABC': { apiKey: "AIzaSyBZ6JR3ggnUiZFQ-wdrewbfhzMUwFaGGzQ", authDomain: "abc-d272a.firebaseapp.com", databaseURL: "https://abc-d272a-default-rtdb.firebaseio.com", projectId: "abc-d272a" },
-        '9DEF': { apiKey: "AIzaSyC2iwuDMWTaJIG8g464Wt0En3CXI2DZiz4", authDomain: "def-85f32.firebaseapp.com", databaseURL: "https://def-85f32-default-rtdb.firebaseio.com", projectId: "def-85f32" },
-        'SETUP': { apiKey: "AIzaSyBbXJ4VuACXyHJhl2eVSB2vHiT6hrx-XnE", authDomain: "setup-73809.firebaseapp.com", databaseURL: "https://setup-73809-default-rtdb.firebaseio.com", projectId: "setup-73809" }
+    // --- SINGLE FIREBASE CONFIG (SETUP) ---
+    const firebaseConfig = { 
+        apiKey: "AIzaSyBbXJ4VuACXyHJhl2eVSB2vHiT6hrx-XnE", 
+        authDomain: "setup-73809.firebaseapp.com", 
+        databaseURL: "https://setup-73809-default-rtdb.firebaseio.com", 
+        projectId: "setup-73809",
+        storageBucket: "setup-73809.firebasestorage.app",
+        messagingSenderId: "843995999446",
+        appId: "1:843995999446:web:7fd92546f2d0bea73fed77"
     };
-    let firebaseInstances = {};
+
+    let app, auth, db;
     let state = { mapels: [], gurus: {}, ujians: {}, akses: {}, bankSoal: [] };
-    // activeAksesKelas removed as we reverted to teacher list
     let githubToken = null;
-    let tempAccessList = []; // Temporary storage for modal editing
+    let tempAccessList = []; 
 
     // --- UI ELEMENTS ---
     const spinnerOverlay = document.getElementById('spinner-overlay');
@@ -517,19 +506,14 @@
     
     // --- AUTH & INIT ---
     async function initializeFirebaseApps() {
-        for (const key in firebaseConfigs) {
-            const config = firebaseConfigs[key];
-            const app = getApps().find(app => app.name === key) || initializeApp(config, key);
-            firebaseInstances[key] = {
-                auth: getAuth(app),
-                db: getDatabase(app)
-            };
-        }
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getDatabase(app);
     }
 
     async function fetchGithubToken() {
         try {
-            const snapshot = await get(ref(firebaseInstances['SETUP'].db, 'github/token'));
+            const snapshot = await get(ref(db, 'github/token'));
             if (snapshot.exists()) {
                 githubToken = snapshot.val();
             } else { console.error('Token GitHub tidak ditemukan di Firebase SETUP.'); }
@@ -538,11 +522,8 @@
 
     async function performAutoLogin() {
         try {
-            const loginPromises = Object.values(firebaseInstances).map(instance => {
-                return signInWithEmailAndPassword(instance.auth, "speropa@gmail.com", "Pajangan201184*");
-            });
-            await Promise.all(loginPromises);
-            console.log("Admin auto-login successful for all instances.");
+            await signInWithEmailAndPassword(auth, "speropa@gmail.com", "Pajangan201184*");
+            console.log("Admin auto-login successful.");
             attachDataListeners();
         } catch (error) {
             console.error("Admin auto-login failed:", error);
@@ -572,55 +553,46 @@
 
     // --- DATA FETCHING & LISTENERS ---
     function attachDataListeners() {
-        const setupDb = firebaseInstances['SETUP'].db;
-        onValue(ref(setupDb, 'customMapels'), s => { state.mapels = s.val() || []; renderMapelTable(); renderAksesTable(); });
-        onValue(ref(setupDb, 'gurus'), s => { state.gurus = s.val() || {}; renderGuruTable(); renderAksesTable(); });
-        onValue(ref(setupDb, 'customUjians'), s => { state.ujians = s.val() || {}; renderUjianTable(); });
-        onValue(ref(setupDb, 'akses'), s => { state.akses = s.val() || {}; renderAksesTable(); });
-        attachBankSoalListeners();
-    }
-    
-    function attachBankSoalListeners() {
-        for (const dbKey in firebaseInstances) {
-            if (dbKey === 'SETUP') continue;
-            onValue(ref(firebaseInstances[dbKey].db, 'ujian'), () => {
-                loadAllBankSoal();
-            });
-        }
+        // Semua data sekarang ada di satu DB
+        onValue(ref(db, 'customMapels'), s => { state.mapels = s.val() || []; renderMapelTable(); renderAksesTable(); });
+        onValue(ref(db, 'gurus'), s => { state.gurus = s.val() || {}; renderGuruTable(); renderAksesTable(); });
+        onValue(ref(db, 'customUjians'), s => { state.ujians = s.val() || {}; renderUjianTable(); });
+        onValue(ref(db, 'akses'), s => { state.akses = s.val() || {}; renderAksesTable(); });
+        
+        // Listener Bank Soal
+        onValue(ref(db, 'ujian'), () => {
+            loadAllBankSoal();
+        });
     }
 
     async function loadAllBankSoal() {
         const allBankSoalEntries = [];
-        const dbPromises = Object.keys(firebaseInstances).map(async (dbKey) => {
-            if (dbKey === 'SETUP') return;
-            try {
-                const snapshot = await get(ref(firebaseInstances[dbKey].db, 'ujian'));
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    for (const thAjaran in data) {
-                        for (const ujian in data[thAjaran]) {
-                            for (const kelas in data[thAjaran][ujian]) {
-                                for (const mapel in data[thAjaran][ujian][kelas]) {
-                                    const bank = data[thAjaran][ujian][kelas][mapel];
-                                    allBankSoalEntries.push({
-                                        tahunAjaran: thAjaran.replace(/-/g, '/'),
-                                        ujian: ujian.replace(/-/g, ' '),
-                                        kelas: kelas.replace('Kelas-', ''),
-                                        mapel: mapel.replace(/-/g, ' '),
-                                        jmlSoal: bank.soal ? Object.keys(bank.soal).length : 0,
-                                        rawUpdateTimestamp: bank.terakhirUpdate,
-                                        updateTerakhir: new Date(bank.terakhirUpdate).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
-                                    });
-                                }
+        try {
+            const snapshot = await get(ref(db, 'ujian'));
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                for (const thAjaran in data) {
+                    for (const ujian in data[thAjaran]) {
+                        for (const kelas in data[thAjaran][ujian]) {
+                            for (const mapel in data[thAjaran][ujian][kelas]) {
+                                const bank = data[thAjaran][ujian][kelas][mapel];
+                                allBankSoalEntries.push({
+                                    tahunAjaran: thAjaran.replace(/-/g, '/'),
+                                    ujian: ujian.replace(/-/g, ' '),
+                                    kelas: kelas.replace('Kelas-', ''),
+                                    mapel: mapel.replace(/-/g, ' '),
+                                    jmlSoal: bank.soal ? Object.keys(bank.soal).length : 0,
+                                    rawUpdateTimestamp: bank.terakhirUpdate,
+                                    updateTerakhir: new Date(bank.terakhirUpdate).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
+                                });
                             }
                         }
                     }
                 }
-            } catch (e) {
-                console.error(`Gagal mengambil data dari ${dbKey}:`, e);
             }
-        });
-        await Promise.all(dbPromises);
+        } catch (e) {
+            console.error("Gagal mengambil data bank soal:", e);
+        }
 
         const latestBankSoalMap = new Map();
         for (const bank of allBankSoalEntries) {
@@ -693,9 +665,6 @@
             </td></tr>`).join('') : `<tr><td colspan="5" class="empty-state">Belum ada topik ujian.</td></tr>`;
     }
     
-    // --- REVERTED AKSES LOGIC (PER TEACHER) ---
-    
-    // 1. Render Table Listing Teachers
     function renderAksesTable() {
         const tbody = document.getElementById('akses-table-body');
         const sortedGuruIds = getSortedGuruIds();
@@ -707,9 +676,6 @@
 
         tbody.innerHTML = sortedGuruIds.map((guruId, i) => {
             const accessList = state.akses[guruId] || [];
-            
-            // Create badges for existing access
-            // Sort by Kelas then Mapel for neatness
             accessList.sort((a,b) => a.kelas - b.kelas || a.mapel.localeCompare(b.mapel));
             
             const accessBadges = accessList.length > 0
@@ -729,20 +695,15 @@
         }).join('');
     }
 
-    // 2. Handle Edit Click (Open Modal for ONE teacher)
+    // Modal Helper for Access
     window.app = window.app || {};
     window.app.editAksesGuru = (guruId) => {
         document.getElementById('akses-guru-id').value = guruId;
         document.getElementById('akses-modal-title').textContent = `Atur Akses - ${state.gurus[guruId].nama}`;
-        
-        // Copy existing access to temp array 
         tempAccessList = JSON.parse(JSON.stringify(state.akses[guruId] || []));
-        
-        // If no access, provide one empty row to start
         if (tempAccessList.length === 0) {
             tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
         }
-        
         renderModalAccessList();
         openModal('akses');
     };
@@ -752,9 +713,7 @@
         const mapelOptions = state.mapels.map(m => `<option value="${m}">${m}</option>`).join('');
         
         container.innerHTML = tempAccessList.map((item, idx) => {
-            // Only show delete button if it's NOT the first row (idx > 0)
             const showDelete = idx > 0;
-            
             return `
             <div class="dynamic-access-row">
                 <div class="form-group" style="flex: 0 0 auto; width: 80px;">
@@ -781,38 +740,27 @@
         `}).join('');
     }
     
-    // Helper to update state from inputs
     window.app.updateAccessRow = (index, field, value) => {
-        if (tempAccessList[index]) {
-            tempAccessList[index][field] = value;
-        }
+        if (tempAccessList[index]) tempAccessList[index][field] = value;
     };
     
-    // Helper to add new row
     window.app.addTempAccessRow = () => {
         tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
         renderModalAccessList();
     };
 
-    // Helper for removing item 
     window.app.removeTempAccess = (index) => {
         tempAccessList.splice(index, 1);
         renderModalAccessList();
     };
     
-
-    // 3. Handle Save (Save temp list to Firebase)
     document.getElementById('akses-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         showProcessing("Menyimpan akses...");
-        
         const guruId = document.getElementById('akses-guru-id').value;
-        
-        // Filter out any invalid entries just in case (e.g., no mapel selected)
         const validList = tempAccessList.filter(item => item.mapel && item.mapel.trim() !== '');
-
         try {
-            await set(ref(firebaseInstances['SETUP'].db, `akses/${guruId}`), validList);
+            await set(ref(db, `akses/${guruId}`), validList);
             closeModal('akses');
         } catch (err) {
             console.error("Gagal menyimpan akses:", err);
@@ -821,7 +769,6 @@
             hideProcessing();
         }
     });
-    
     
     function renderBankSoalTable() {
         const tbody = document.getElementById('bank-soal-table-body');
@@ -851,28 +798,27 @@
         openModal('confirm');
     }
 
+    // Helper for setup DB - Keep it simple as 'db'
+    const setupDb = () => db;
+
     // Append other window.app functions
     Object.assign(window.app, {
         editMapel: (index) => { document.getElementById('mapel-form').dataset.id = index; document.getElementById('mapel-name').value = state.mapels[index]; openModal('mapel'); },
-        deleteMapel: (index) => showConfirmation('Hapus Mapel', `Yakin ingin menghapus mapel "${state.mapels[index]}"?`, async () => { showSpinner(); let updatedMapels = [...state.mapels]; updatedMapels.splice(index, 1); await set(ref(firebaseInstances['SETUP'].db, 'customMapels'), updatedMapels); hideSpinner(); }),
-        emptyMapel: () => showConfirmation('Kosongkan Mapel', 'Yakin ingin mengosongkan SEMUA data mata pelajaran? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); await remove(ref(firebaseInstances['SETUP'].db, 'customMapels')); hideSpinner(); }),
+        deleteMapel: (index) => showConfirmation('Hapus Mapel', `Yakin ingin menghapus mapel "${state.mapels[index]}"?`, async () => { showSpinner(); let updatedMapels = [...state.mapels]; updatedMapels.splice(index, 1); await set(ref(db, 'customMapels'), updatedMapels); hideSpinner(); }),
+        emptyMapel: () => showConfirmation('Kosongkan Mapel', 'Yakin ingin mengosongkan SEMUA data mata pelajaran? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); await remove(ref(db, 'customMapels')); hideSpinner(); }),
         editGuru: (id) => { const guru = state.gurus[id]; const form = document.getElementById('guru-form'); form.dataset.id = id; form.querySelector('#guru-nama').value = guru.nama; form.querySelector('#guru-username').value = guru.username; form.querySelector('#guru-password').value = guru.password; openModal('guru'); },
-        deleteGuru: (id) => showConfirmation('Hapus Guru', `Yakin ingin menghapus guru "${state.gurus[id].nama}"? Ini juga akan menghapus aksesnya.`, async () => { showSpinner(); const setupDb = firebaseInstances['SETUP'].db; await remove(ref(setupDb, `gurus/${id}`)); await remove(ref(setupDb, `akses/${id}`)); hideSpinner(); }),
-        emptyGuru: () => showConfirmation('Kosongkan Guru', 'Yakin ingin mengosongkan SEMUA data guru dan aksesnya? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); const setupDb = firebaseInstances['SETUP'].db; await Promise.all([remove(ref(setupDb, 'gurus')), remove(ref(setupDb, 'akses'))]); hideSpinner(); }),
+        deleteGuru: (id) => showConfirmation('Hapus Guru', `Yakin ingin menghapus guru "${state.gurus[id].nama}"? Ini juga akan menghapus aksesnya.`, async () => { showSpinner(); await remove(ref(db, `gurus/${id}`)); await remove(ref(db, `akses/${id}`)); hideSpinner(); }),
+        emptyGuru: () => showConfirmation('Kosongkan Guru', 'Yakin ingin mengosongkan SEMUA data guru dan aksesnya? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); await Promise.all([remove(ref(db, 'gurus')), remove(ref(db, 'akses'))]); hideSpinner(); }),
         editUjian: (tahunAjaran, id) => { const ujian = state.ujians[tahunAjaran][id]; const form = document.getElementById('ujian-form'); form.dataset.id = id; form.querySelector('#ujian-name').value = ujian.name; document.getElementById('ujian-modal-ta-select').value = tahunAjaran.replace('-','/'); openModal('ujian'); },
-        deleteUjian: (tahunAjaran, id) => showConfirmation('Hapus Ujian', `Yakin ingin menghapus topik ujian "${state.ujians[tahunAjaran][id].name}"?`, async () => { showSpinner(); await remove(ref(firebaseInstances['SETUP'].db, `customUjians/${tahunAjaran}/${id}`)); hideSpinner(); }),
-        toggleUjianStatus: async (tahunAjaran, id) => { const currentStatus = state.ujians[tahunAjaran][id].active; await update(ref(firebaseInstances['SETUP'].db, `customUjians/${tahunAjaran}/${id}`), { active: !currentStatus }); },
+        deleteUjian: (tahunAjaran, id) => showConfirmation('Hapus Ujian', `Yakin ingin menghapus topik ujian "${state.ujians[tahunAjaran][id].name}"?`, async () => { showSpinner(); await remove(ref(db, `customUjians/${tahunAjaran}/${id}`)); hideSpinner(); }),
+        toggleUjianStatus: async (tahunAjaran, id) => { const currentStatus = state.ujians[tahunAjaran][id].active; await update(ref(db, `customUjians/${tahunAjaran}/${id}`), { active: !currentStatus }); },
         
         previewBankSoal: async (bank) => {
             showProcessing('Memuat data soal...');
             const dbPath = `ujian/${bank.tahunAjaran.replace('/','-')}/${bank.ujian.replace(/\s/g,'-')}/Kelas-${bank.kelas}/${bank.mapel.replace(/\s/g,'-')}`;
-            let dbName;
-            if (bank.kelas == '7') dbName = '7ABC';
-            else if (bank.kelas == '8') dbName = '8ABC';
-            else if (bank.kelas == '9') dbName = '9ABC';
             
             try {
-                const snapshot = await get(ref(firebaseInstances[dbName].db, dbPath));
+                const snapshot = await get(ref(db, dbPath));
                 if (snapshot.exists() && snapshot.val().soal) {
                     const soalData = snapshot.val().soal;
                     const previewContainer = document.getElementById('preview-screen');
@@ -955,15 +901,8 @@
             // 2. Hapus data dari Firebase
             processingText.textContent = 'Menghapus data dari server...';
             const dbPath = `ujian/${safeTA}/${safeUjian}/Kelas-${bank.kelas}/${safeMapel}`;
-            const targetDbNames = [];
-            if (bank.kelas == '7') targetDbNames.push('7ABC', '7DEF');
-            else if (bank.kelas == '8') targetDbNames.push('8ABC', '8DEF');
-            else if (bank.kelas == '9') targetDbNames.push('9ABC', '9DEF');
-
-            const deletePromises = targetDbNames.map(appName => {
-                return remove(ref(firebaseInstances[appName].db, dbPath));
-            });
-            await Promise.all(deletePromises);
+            
+            await remove(ref(db, dbPath));
 
             alert('Bank soal dan gambar terkait berhasil dihapus.');
 
@@ -975,19 +914,14 @@
         }
     }
 
-
-    const setupDb = () => firebaseInstances['SETUP'].db;
-
-    document.getElementById('mapel-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const name = document.getElementById('mapel-name').value.trim(); let updatedMapels = [...state.mapels]; if (id) { updatedMapels[id] = name; } else { updatedMapels.push(name); } await set(ref(setupDb(), 'customMapels'), updatedMapels); closeModal('mapel'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
-    document.getElementById('guru-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const guruData = { nama: document.getElementById('guru-nama').value, username: document.getElementById('guru-username').value, password: document.getElementById('guru-password').value, }; const targetRef = id ? ref(setupDb(), `gurus/${id}`) : push(ref(setupDb(), 'gurus')); await set(targetRef, guruData); closeModal('guru'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
-    document.getElementById('ujian-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const tahunAjaran = document.getElementById('ujian-modal-ta-select').value.replace('/', '-'); const ujianData = { name: document.getElementById('ujian-name').value, active: id && state.ujians[tahunAjaran] && state.ujians[tahunAjaran][id] ? state.ujians[tahunAjaran][id].active : true, }; const targetRef = id ? ref(setupDb(), `customUjians/${tahunAjaran}/${id}`) : push(ref(setupDb(), `customUjians/${tahunAjaran}`)); await set(targetRef, ujianData); closeModal('ujian'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
-    // REMOVED OLD AKSES LISTENER, MOVED TO LOGIC ABOVE
+    document.getElementById('mapel-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const name = document.getElementById('mapel-name').value.trim(); let updatedMapels = [...state.mapels]; if (id) { updatedMapels[id] = name; } else { updatedMapels.push(name); } await set(ref(db, 'customMapels'), updatedMapels); closeModal('mapel'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
+    document.getElementById('guru-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const guruData = { nama: document.getElementById('guru-nama').value, username: document.getElementById('guru-username').value, password: document.getElementById('guru-password').value, }; const targetRef = id ? ref(db, `gurus/${id}`) : push(ref(db, 'gurus')); await set(targetRef, guruData); closeModal('guru'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
+    document.getElementById('ujian-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const tahunAjaran = document.getElementById('ujian-modal-ta-select').value.replace('/', '-'); const ujianData = { name: document.getElementById('ujian-name').value, active: id && state.ujians[tahunAjaran] && state.ujians[tahunAjaran][id] ? state.ujians[tahunAjaran][id].active : true, }; const targetRef = id ? ref(db, `customUjians/${tahunAjaran}/${id}`) : push(ref(db, `customUjians/${tahunAjaran}`)); await set(targetRef, ujianData); closeModal('ujian'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
     
     document.getElementById('upload-csv-btn').addEventListener('click', () => document.getElementById('csv-upload').click());
-    document.getElementById('csv-upload').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; Papa.parse(file, { header: false, skipEmptyLines: true, complete: async (results) => { showSpinner(); const newGurus = {}; for(let i = 1; i < results.data.length; i++) { const row = results.data[i]; if (row.length >= 4) { const guruData = { nama: row[1], username: row[2], password: row[3] }; const newGuruRef = push(ref(setupDb(), 'gurus')); newGurus[newGuruRef.key] = guruData; } } await update(ref(setupDb(), 'gurus'), newGurus); e.target.value = ''; hideSpinner(); alert(`${Object.keys(newGurus).length} guru berhasil ditambahkan.`); } }); });
+    document.getElementById('csv-upload').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; Papa.parse(file, { header: false, skipEmptyLines: true, complete: async (results) => { showSpinner(); const newGurus = {}; for(let i = 1; i < results.data.length; i++) { const row = results.data[i]; if (row.length >= 4) { const guruData = { nama: row[1], username: row[2], password: row[3] }; const newGuruRef = push(ref(db, 'gurus')); newGurus[newGuruRef.key] = guruData; } } await update(ref(db, 'gurus'), newGurus); e.target.value = ''; hideSpinner(); alert(`${Object.keys(newGurus).length} guru berhasil ditambahkan.`); } }); });
 
     document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id.replace('-modal', '')); }));
-    // Updated listener to include modal-cancel-btn
     document.querySelectorAll('.close-btn, .modal-cancel-btn').forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay').id.replace('-modal', ''))));
     
     document.getElementById('add-mapel-btn').addEventListener('click', () => { document.getElementById('mapel-form').reset(); delete document.getElementById('mapel-form').dataset.id; openModal('mapel'); });
