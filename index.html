@@ -3,41 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Bank Soal</title>
+    <title>Admin Bank Soal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://css2.gg/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        /* --- KONFIGURASI WARNA DARI REFERENSI --- */
         :root {
-            /* Warna Utama (Biru Admin) */
             --primary-color: #3498db; 
             --primary-hover: #2980b9;
             --primary-light: #ebf5fb; 
-            
-            /* Warna Sekunder (Abu-abu) */
             --secondary-color: #95a5a6;
             --secondary-hover: #7f8c8d;
-            
-            /* Warna Status */
-            --success-color: #27ae60; /* Hijau */
+            --success-color: #27ae60;
             --success-hover: #219150;
-            --danger-color: #e74c3c; /* Merah */
+            --danger-color: #e74c3c;
             --danger-hover: #c0392b;
-            --warning-color: #f39c12; /* Kuning/Oranye */
-            
-            /* Background & Text */
-            --background-color: #f4f7f6; /* Background Body dari referensi */
+            --warning-color: #f39c12; 
+            --background-color: #f4f7f6;
             --card-background: #FFFFFF;
-            --text-color: #2c3e50; /* Warna teks utama (Dark Blue-Gray) */
+            --text-color: #2c3e50;
             --text-light: #7f8c8d;
-            --border-color: #bdc3c7; /* Border sedikit lebih gelap */
+            --border-color: #bdc3c7;
             --header-bg: #FFFFFF;
         }
-
         *, *::before, *::after { box-sizing: border-box; }
-        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
@@ -47,11 +37,8 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        
         #app-shell { width: 100%; opacity: 0; transition: opacity 0.5s ease-in-out; }
         #app-shell.loaded { opacity: 1; }
-        
-        /* Header & Navigation */
         .top-header {
             background-color: var(--header-bg);
             padding: 0 32px;
@@ -62,7 +49,6 @@
         .header-content { display: flex; align-items: center; max-width: 1400px; margin: 0 auto; }
         .top-nav { display: flex; flex-grow: 1; overflow-x: auto; scrollbar-width: none; gap: 5px; }
         .top-nav::-webkit-scrollbar { display: none; }
-        
         .nav-link {
             display: flex; align-items: center; gap: 10px;
             padding: 18px 16px; text-decoration: none; color: var(--text-light);
@@ -71,24 +57,13 @@
             transition: all 0.2s ease;
             white-space: nowrap;
         }
-        .nav-link:hover { 
-            color: var(--primary-color); 
-            background-color: rgba(52, 152, 219, 0.05); 
-        }
-        .nav-link.active { 
-            color: var(--primary-color); 
-            border-bottom-color: var(--primary-color); 
-            font-weight: 700; 
-        }
+        .nav-link:hover { color: var(--primary-color); background-color: rgba(52, 152, 219, 0.05); }
+        .nav-link.active { color: var(--primary-color); border-bottom-color: var(--primary-color); font-weight: 700; }
         .nav-link svg { width: 18px; height: 18px; }
-        
-        /* Main Content Layout */
         .main-content { padding: 32px; max-width: 1400px; margin: 0 auto; }
         .content-view { display: none; }
         .content-view.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* View Header */
         .view-header {
             display: flex; flex-wrap: wrap; gap: 16px;
             justify-content: space-between; align-items: center;
@@ -96,13 +71,8 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
         }
-        .view-header h1 { 
-            margin: 0; font-size: 1.8rem; font-weight: 700; 
-            color: #2c3e50; /* Warna judul dari referensi */
-        }
+        .view-header h1 { margin: 0; font-size: 1.8rem; font-weight: 700; color: #2c3e50; }
         .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        /* Buttons - Disesuaikan dengan Referensi */
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             padding: 10px 20px; border: none; border-radius: 6px;
@@ -110,241 +80,132 @@
             font-size: 0.95rem; font-weight: 500; cursor: pointer;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Shadow khas referensi */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .btn svg { width: 16px; height: 16px; }
-        .btn:hover:not(:disabled) {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px); /* Efek naik sedikit */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+        .btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
         .btn:active { transform: translateY(0); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
         .btn:disabled { background-color: #bdc3c7; color: white; cursor: not-allowed; box-shadow: none; transform: none; }
-        
         .btn-danger { background-color: var(--danger-color); }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); }
-        
         .btn-success { background-color: var(--success-color); }
         .btn-success:hover:not(:disabled) { background-color: var(--success-hover); }
-
-        .btn-secondary { 
-            background-color: var(--secondary-color); 
-            color: white; 
-            border: none;
+        .btn-secondary { background-color: var(--secondary-color); color: white; border: none; }
+        .btn-secondary:hover:not(:disabled) { background-color: var(--secondary-hover); color: white; }
+        .btn-danger-sm {
+            background-color: #fee2e2; color: var(--danger-color); border: 1px solid #fecaca;
+            padding: 4px 8px; border-radius: 6px; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;
         }
-        .btn-secondary:hover:not(:disabled) { 
-            background-color: var(--secondary-hover); 
-            color: white;
-        }
-        
-        /* Card */
+        .btn-danger-sm:hover { background-color: var(--danger-color); color: white; border-color: var(--danger-color); }
         .card {
             background-color: var(--card-background); border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow lebih lembut */
-            border: none; /* Hapus border garis, gunakan shadow saja seperti referensi */
-            overflow: hidden;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: none; overflow: hidden; margin-bottom: 20px;
         }
-
-        /* Tables - Disesuaikan dengan Referensi */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        
-        th, td { 
-            padding: 12px 15px; 
-            text-align: left; 
-            border-bottom: 1px solid #e0e0e0; 
-            vertical-align: middle;
-        }
-        
-        thead th { 
-            background-color: #ecf0f1; /* Header abu-abu khas referensi */
-            color: #2c3e50; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        
-        tbody tr:nth-child(even) { background-color: #f9f9f9; } /* Zebra striping */
-        tbody tr:hover { background-color: #ebf5fb; } /* Hover baris */
-        
-        /* Action Buttons in Table (Small Circular/Icon buttons) */
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0; vertical-align: middle; }
+        thead th { background-color: #ecf0f1; color: #2c3e50; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; white-space: nowrap; }
+        tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        tbody tr:hover { background-color: #ebf5fb; }
         .actions-cell { display: flex; gap: 8px; width: 100px; }
         .actions-cell button { 
-            background: none; border: none; cursor: pointer; 
-            padding: 6px; border-radius: 50%; 
-            transition: background 0.2s, transform 0.2s;
-            display: inline-flex; align-items: center; justify-content: center;
+            background: none; border: none; cursor: pointer; padding: 6px; border-radius: 50%; 
+            transition: background 0.2s, transform 0.2s; display: inline-flex; align-items: center; justify-content: center;
         }
         .actions-cell button:hover { background-color: #dfe6e9; transform: translateY(-1px); }
         .actions-cell button svg { width: 18px; height: 18px; }
-        
-        /* Specific Colors for Action Icons */
         .actions-cell button[title="Edit"] svg, .actions-cell button[onclick*="edit"] svg { color: var(--primary-color); }
         .actions-cell button[title="Hapus"] svg, .actions-cell button[onclick*="delete"] svg { color: var(--danger-color); }
-        
-        /* Modals */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.6); display: none;
-            justify-content: center; align-items: center; z-index: 1000;
-            animation: fadeIn 0.3s ease;
+            background-color: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; animation: fadeIn 0.3s ease;
         }
         .modal-content {
-            background-color: var(--card-background); padding: 30px;
-            border-radius: 10px; width: 90%; max-width: 600px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            animation: zoomIn 0.3s ease-out;
-            display: flex;
-            flex-direction: column;
+            background-color: var(--card-background); padding: 30px; border-radius: 10px; width: 90%; max-width: 600px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); animation: zoomIn 0.3s ease-out; display: flex; flex-direction: column;
         }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        .modal-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 20px; 
-            flex-shrink: 0;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0; }
         .modal-header h3 { margin: 0; font-size: 1.5rem; color: #2c3e50; }
-        
         .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #95a5a6; transition: color 0.2s; }
         .close-btn:hover { color: #e74c3c; }
-        
-        .modal-body { 
-            max-height: 70vh; 
-            overflow-y: auto; 
-            margin-bottom: 20px; 
-            flex-grow: 1;
-            padding-right: 5px; 
-            min-height: 200px; 
-        }
-        
-        .modal-actions { 
-            display: flex; justify-content: flex-end; gap: 10px; 
-            padding-top: 20px; border-top: 1px solid #eee; 
-            flex-shrink: 0;
-        }
-        
-        /* Forms */
+        .modal-body { max-height: 70vh; overflow-y: auto; margin-bottom: 20px; flex-grow: 1; padding-right: 5px; min-height: 100px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 20px; border-top: 1px solid #eee; flex-shrink: 0; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #34495e; font-size: 0.9rem;}
         .form-control {
-            width: 100%; padding: 12px; border: 1px solid #ccc;
-            border-radius: 6px; font-size: 1rem; background-color: #fff;
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; background-color: #fff;
             color: #2c3e50; transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-            outline: none;
-        }
-        
-        /* Spinners & Loaders */
+        .form-control:focus { border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); outline: none; }
         #spinner-overlay, #processing-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.8); z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
         #processing-overlay { background-color: rgba(44, 62, 80, 0.8); }
         .spinner {
-            width: 40px; height: 40px; border: 5px solid rgba(0, 0, 0, 0.1);
-            border-top: 5px solid var(--primary-color); border-radius: 50%;
-            animation: spin 1s ease infinite;
+            width: 40px; height: 40px; border: 5px solid rgba(0, 0, 0, 0.1); border-top: 5px solid var(--primary-color);
+            border-radius: 50%; animation: spin 1s ease infinite;
         }
         #spinner-text, #processing-text { margin-top: 15px; color: #7f8c8d; font-weight: 600; }
         #processing-text { color: white; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
         .empty-state { text-align: center; padding: 40px; color: #bdc3c7; font-style: italic; }
-        
-        /* Toggle Switch (Selaras dengan referensi) */
         .toggle-switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
         .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary-color); }
         input:checked + .slider:before { transform: translateX(20px); }
-        
-        /* Tags */
         .akses-tag { 
-            display: inline-flex; align-items: center; gap: 4px;
-            background-color: #ecf0f1; color: #2c3e50; 
-            padding: 4px 10px; border-radius: 15px; 
-            font-size: 0.85em; margin: 2px; font-weight: 600;
-            border: 1px solid #bdc3c7;
+            display: inline-flex; align-items: center; gap: 4px; background-color: #ecf0f1; color: #2c3e50; 
+            padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; font-weight: 600; border: 1px solid #bdc3c7;
         }
-        
-        /* Dynamic Access Row Styles */
         .dynamic-access-row {
-            display: flex; gap: 10px; align-items: flex-end;
-            padding: 15px; background: #fff; border: 1px solid #e0e0e0;
-            border-radius: 8px; margin-bottom: 10px;
-            transition: all 0.2s;
+            display: flex; gap: 10px; align-items: flex-end; padding: 15px; background: #fff; border: 1px solid #e0e0e0;
+            border-radius: 8px; margin-bottom: 10px; transition: all 0.2s;
         }
         .dynamic-access-row:hover { border-color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .dynamic-access-row .form-group { margin-bottom: 0; }
-        
         .remove-row-btn {
-            background: #fee2e2; color: #b91c1c; border: none;
-            width: 42px; height: 42px; border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s;
-            flex-shrink: 0;
+            background: #fee2e2; color: #b91c1c; border: none; width: 42px; height: 42px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0;
         }
         .remove-row-btn:hover { background: #fecaca; }
-        
-        /* Preview Modal Styles */
-        #preview-modal .modal-content { 
-            max-width: 95vw; max-height: 95vh; padding: 15px; 
-            overflow: hidden; 
-            display: flex; flex-direction: column;
+        .accordion-item {
+            border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 15px; background: white;
+            overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
-        #preview-device-wrapper { transition: all 0.4s ease-in-out; position: relative; margin: 0 auto; flex-grow: 1; overflow: hidden; }
-        #preview-device-wrapper.is-mobile {
-            width: 375px; height: 812px; background-color: #1c1c1e; border-radius: 50px; padding: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 0 2px #333; margin-bottom: 10px;
+        .accordion-header {
+            padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            background-color: #fff; transition: background-color 0.2s; user-select: none;
         }
-        #preview-device-wrapper.is-mobile::before {
-            content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-            width: 160px; height: 28px; background-color: #1c1c1e; border-radius: 0 0 15px 15px; z-index: 2;
+        .accordion-header:hover { background-color: #f8f9fa; }
+        .accordion-title-wrapper { display: flex; align-items: center; gap: 15px; flex-grow: 1; }
+        .accordion-title { font-weight: 700; color: #2c3e50; font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
+        .accordion-content { display: none; border-top: 1px solid #eee; background-color: #fafafa; padding: 20px; }
+        .accordion-content.open { display: block; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .chevron { transition: transform 0.3s; width: 20px; height: 20px; color: #95a5a6; }
+        .accordion-item.active > .accordion-header .chevron { transform: rotate(180deg); color: var(--primary-color); }
+        .level-1-header { background-color: #f1f5f9 !important; border-left: 5px solid var(--primary-color); }
+        .level-2-container { margin-left: 5px; }
+        .level-2-header { background-color: #fff !important; border-bottom: 1px solid #eee; padding: 14px 15px; }
+        .level-2-header .accordion-title { font-size: 1rem; color: #34495e; }
+        .level-3-container { margin: 10px 0; padding-left: 15px; }
+        .mapel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 10px; }
+        .mapel-card {
+            background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;
+            display: flex; justify-content: space-between; align-items: flex-start; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        #preview-device-wrapper.is-desktop {
-            width: 90vw; max-width: 1100px; height: 75vh; background-color: #333;
-            border-radius: 10px; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.25); margin-bottom: 10px;
+        .mapel-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); border-color: var(--primary-color); }
+        .mapel-info h4 { margin: 0 0 5px 0; font-size: 1rem; color: #2c3e50; font-weight: 600; }
+        .mapel-meta { font-size: 0.85rem; color: #7f8c8d; display: flex; flex-direction: column; gap: 2px; }
+        .badge-count {
+            background-color: var(--primary-light); color: var(--primary-color); padding: 2px 8px; border-radius: 12px;
+            font-weight: 600; font-size: 0.75rem; display: inline-block; margin-bottom: 4px; width: fit-content;
         }
-        .phone-screen {
-            background-color: white; color: #333;
-            width: 100%; height: 100%; overflow-y: auto; padding: 25px 15px; box-sizing: border-box;
-        }
-        #preview-device-wrapper.is-mobile .phone-screen { border-radius: 38px; }
-        #preview-device-wrapper.is-desktop .phone-screen { border-radius: 5px; }
-        .preview-soal-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
-        .preview-soal-item:last-child { border-bottom: none; }
-        .preview-soal-item h3 { margin: 0 0 15px 0; font-size: 1.1em; color: var(--primary-color); }
-        .preview-soal-item .pertanyaan { line-height: 1.6; margin-bottom: 20px; word-wrap: break-word; }
-        .preview-soal-item img { max-width: 100% !important; height: auto !important; border-radius: 8px; }
-        
-        .preview-option-item {
-            display: flex; align-items: flex-start; gap: 12px;
-            padding: 12px 16px; border: 1px solid #e0e0e0;
-            border-radius: 6px; margin-bottom: 10px; background-color: #f9f9f9;
-        }
-        .option-letter {
-            display: flex; justify-content: center; align-items: center;
-            width: 24px; height: 24px; flex-shrink: 0;
-            background-color: var(--primary-color); border: none;
-            border-radius: 50%; font-weight: 600; font-size: 0.9em;
-            color: white;
-        }
-        .option-text { word-wrap: break-word; flex-grow: 1; }
-        
-        .preview-controls { display: flex; gap: 10px; justify-content: center; align-items: center; padding-top: 10px; }
-        .preview-controls button { padding: 8px 16px; font-weight: 500; }
-        .preview-controls .active { background-color: var(--primary-hover); }
-
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .top-header { padding: 0 15px; }
             .main-content { padding: 15px; }
@@ -355,17 +216,15 @@
             .nav-link span { display: none; }
             .nav-link svg { margin: 0 auto; }
             .nav-link { padding: 15px; }
-            
             .dynamic-access-row { flex-direction: row; flex-wrap: wrap; }
             .dynamic-access-row .form-group:first-child { width: 80px; }
             .dynamic-access-row .form-group:nth-child(2) { width: calc(100% - 140px); flex: unset; }
-            
+            .mapel-grid { grid-template-columns: 1fr; }
         }
-
     </style>
 </head>
 <body>
-    <div id="spinner-overlay"><div class="spinner"></div><div id="spinner-text">Memuat...</div></div>
+    <div id="spinner-overlay"><div class="spinner"></div><div id="spinner-text">Menghubungkan ke server...</div></div>
     <div id="processing-overlay" style="display: none;"><div class="spinner"></div><div id="processing-text">Memproses...</div></div>
 
     <div id="app-shell">
@@ -388,574 +247,318 @@
                 <div class="view-header"><h1>Manajemen Topik Ujian</h1><div class="header-actions"><button class="btn" id="add-ujian-btn"><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg><span>Tambah Topik</span></button></div></div>
                 <div class="card"><div class="table-wrapper"><table><thead><tr><th style="width: 50px;">No</th><th>Topik Ujian</th><th>Tahun Ajaran</th><th style="width: 100px;">Status</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="ujian-table-body"></tbody></table></div></div>
             </div>
-            
             <div id="akses-guru-view" class="content-view">
                 <div class="view-header"><h1>Manajemen Akses Guru</h1></div>
-                <div class="card">
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">No</th>
-                                    <th>Nama Guru</th>
-                                    <th>Akses Kelas & Mapel</th>
-                                    <th style="width: 100px;">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="akses-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
+                <div class="card"><div class="table-wrapper"><table><thead><tr><th style="width: 50px;">No</th><th>Nama Guru</th><th>Akses Kelas & Mapel</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="akses-table-body"></tbody></table></div></div>
             </div>
-            
-            <div id="bank-soal-view" class="content-view"><div class="view-header"><h1>Tinjauan Bank Soal</h1></div><div class="card"><div class="table-wrapper"><table><thead><tr><th>Tahun Ajaran</th><th>Ujian</th><th>Kelas</th><th>Mata Pelajaran</th><th>Jml Soal</th><th>Update Terakhir</th><th style="width: 100px;">Aksi</th></tr></thead><tbody id="bank-soal-table-body"></tbody></table></div></div></div>
+            <div id="bank-soal-view" class="content-view">
+                <div class="view-header"><h1>Tinjauan Bank Soal</h1></div>
+                <div id="bank-soal-hierarchy"></div>
+            </div>
         </main>
     </div>
 
-    <!-- Modals -->
     <div id="mapel-modal" class="modal-overlay"><div class="modal-content"><form id="mapel-form"><div class="modal-header"><h3>Manajemen Mata Pelajaran</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="mapel-id"><div class="form-group"><label for="mapel-name">Nama Mata Pelajaran</label><input type="text" id="mapel-name" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     <div id="guru-modal" class="modal-overlay"><div class="modal-content"><form id="guru-form"><div class="modal-header"><h3>Manajemen Guru</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="guru-id"><div class="form-group"><label for="guru-nama">Nama Guru</label><input type="text" id="guru-nama" class="form-control" required></div><div class="form-group"><label for="guru-username">Username</label><input type="text" id="guru-username" class="form-control" required></div><div class="form-group"><label for="guru-password">Password</label><input type="text" id="guru-password" class="form-control" required></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
     <div id="ujian-modal" class="modal-overlay"><div class="modal-content"><form id="ujian-form"><div class="modal-header"><h3>Manajemen Topik Ujian</h3><button type="button" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="ujian-id"><div class="form-group"><label for="ujian-name">Nama Topik Ujian</label><input type="text" id="ujian-name" class="form-control" required></div><div class="form-group"><label for="ujian-modal-ta-select">Tahun Ajaran</label><select id="ujian-modal-ta-select" class="form-control" required></select></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan</button></div></form></div></div>
-    
-    <div id="akses-modal" class="modal-overlay">
-        <div class="modal-content">
-            <form id="akses-form">
-                <div class="modal-header">
-                    <h3 id="akses-modal-title">Atur Akses Guru</h3>
-                    <div class="flex items-center gap-2">
-                         <button type="button" class="btn btn-success" onclick="window.app.addTempAccessRow()" style="padding: 8px 15px; font-size: 0.85rem;">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                            Tambah
-                        </button>
-                        <button type="button" class="close-btn">&times;</button>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="akses-guru-id">
-                    <div id="dynamic-access-list"></div>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button>
-                    <button type="submit" class="btn">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    <div id="akses-modal" class="modal-overlay"><div class="modal-content"><form id="akses-form"><div class="modal-header"><h3 id="akses-modal-title">Atur Akses Guru</h3><div class="flex items-center gap-2"><button type="button" class="btn btn-success" onclick="window.app.addTempAccessRow()" style="padding: 8px 15px; font-size: 0.85rem;"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>Tambah</button><button type="button" class="close-btn">&times;</button></div></div><div class="modal-body"><input type="hidden" id="akses-guru-id"><div id="dynamic-access-list"></div></div><div class="modal-actions"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="submit" class="btn">Simpan Perubahan</button></div></form></div></div>
     <div id="confirm-modal" class="modal-overlay"><div class="modal-content" style="max-width: 400px; text-align: center;"><div class="modal-body"><h3 id="confirm-title">Konfirmasi</h3><p id="confirm-text"></p></div><div class="modal-actions" style="justify-content: center;"><button type="button" class="btn btn-secondary modal-cancel-btn">Batal</button><button type="button" class="btn btn-danger" id="confirm-ok">Ya, Lanjutkan</button></div></div></div>
-
-    <div id="preview-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div id="preview-device-wrapper" class="is-mobile">
-                <div id="preview-screen" class="phone-screen"></div>
-            </div>
-            <div class="preview-controls">
-                <button id="preview-mobile-btn" class="btn active">Ponsel</button>
-                <button id="preview-desktop-btn" class="btn btn-secondary">Desktop</button>
-                <button id="preview-close-btn" class="btn btn-danger">Tutup</button>
-            </div>
-        </div>
-    </div>
-
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
     import { getDatabase, ref, set, onValue, push, remove, update, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    // --- NEW SINGLE FIREBASE CONFIG (abc-a13ea) ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyBAKwT7JY_HGnvK6h3u30-dfgRPXfef8l8",
-      authDomain: "abc-a13ea.firebaseapp.com",
-      databaseURL: "https://abc-a13ea-default-rtdb.firebaseio.com",
-      projectId: "abc-a13ea",
-      storageBucket: "abc-a13ea.firebasestorage.app",
-      messagingSenderId: "1052966795599",
-      appId: "1:1052966795599:web:d4d331199ca9081321ed3a"
-    };
+    window.app = window.app || {};
 
-    let app, auth, db;
+    const configAturan = { apiKey: "AIzaSyAoH-kHpL15GHnFa41ZdG7dWFUsUZ4QJKc", authDomain: "aturan-694fe.firebaseapp.com", databaseURL: "https://aturan-694fe-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aturan-694fe", storageBucket: "aturan-694fe.firebasestorage.app", messagingSenderId: "1008762962672", appId: "1:1008762962672:web:57815d4f3c49f211ebf835" };
+    const config7 = { apiKey: "AIzaSyBkhBZw3oADXUAJ9FXY9-g7XBsSmQhzZVk", authDomain: "def-ab5ee.firebaseapp.com", databaseURL: "https://def-ab5ee-default-rtdb.firebaseio.com", projectId: "def-ab5ee", storageBucket: "def-ab5ee.firebasestorage.app", messagingSenderId: "129712840107", appId: "1:129712840107:web:ab10576fed95f735dd46ee" };
+    const config8 = { apiKey: "AIzaSyAwilwwwEJ2MAdSf09BotxNH-z6RiXaHXY", authDomain: "abc-43e73.firebaseapp.com", databaseURL: "https://abc-43e73-default-rtdb.firebaseio.com", projectId: "abc-43e73", storageBucket: "abc-43e73.firebasestorage.app", messagingSenderId: "1043754727577", appId: "1:1043754727577:web:56c3732bf2a6ac900c2008" };
+    const config9 = { apiKey: "AIzaSyBZ6JR3ggnUiZFQ-wdrewbfhzMUwFaGGzQ", authDomain: "abc-d272a.firebaseapp.com", databaseURL: "https://abc-d272a-default-rtdb.firebaseio.com", projectId: "abc-d272a", storageBucket: "abc-d272a.firebasestorage.app", messagingSenderId: "1036605132828", appId: "1:1036605132828:web:2b59f91290d50afe304fd9" };
+
+    const appAturan = initializeApp(configAturan, "appAturan");
+    const app7 = initializeApp(config7, "app7");
+    const app8 = initializeApp(config8, "app8");
+    const app9 = initializeApp(config9, "app9");
+
+    const authAturan = getAuth(appAturan);
+    const dbAturan = getDatabase(appAturan);
+    const auth7 = getAuth(app7);
+    const db7 = getDatabase(app7);
+    const auth8 = getAuth(app8);
+    const db8 = getDatabase(app8);
+    const auth9 = getAuth(app9);
+    const db9 = getDatabase(app9);
+
     let state = { mapels: [], gurus: {}, ujians: {}, akses: {}, bankSoal: [] };
     let githubToken = null;
     let tempAccessList = []; 
+    let bankSoalCache = { '7': [], '8': [], '9': [] };
 
-    // --- UI ELEMENTS ---
     const spinnerOverlay = document.getElementById('spinner-overlay');
     const spinnertext = document.getElementById('spinner-text');
     const processingOverlay = document.getElementById('processing-overlay');
     const processingText = document.getElementById('processing-text');
-
     const appShell = document.getElementById('app-shell');
-    const modals = {
-        mapel: document.getElementById('mapel-modal'),
-        guru: document.getElementById('guru-modal'),
-        ujian: document.getElementById('ujian-modal'),
-        akses: document.getElementById('akses-modal'),
-        confirm: document.getElementById('confirm-modal'),
-        preview: document.getElementById('preview-modal')
-    };
+    const modals = { mapel: document.getElementById('mapel-modal'), guru: document.getElementById('guru-modal'), ujian: document.getElementById('ujian-modal'), akses: document.getElementById('akses-modal'), confirm: document.getElementById('confirm-modal') };
     
-    // --- UTILS ---
+    function getDbForGrade(gradeInput) {
+        const gradeStr = String(gradeInput).trim().toUpperCase();
+        if (gradeStr.startsWith('7')) return db7;
+        if (gradeStr.startsWith('8')) return db8;
+        if (gradeStr.startsWith('9')) return db9;
+        return null;
+    }
+
     const showSpinner = (text = "Memuat...") => { spinnertext.textContent = text; spinnerOverlay.style.display = 'flex'; };
     const hideSpinner = () => { spinnerOverlay.style.display = 'none'; appShell.classList.add('loaded'); };
     const showProcessing = (text = "Memproses...") => { processingText.textContent = text; processingOverlay.style.display = 'flex'; };
     const hideProcessing = () => { processingOverlay.style.display = 'none'; };
-
     const openModal = (modalName) => modals[modalName].style.display = 'flex';
     const closeModal = (modalName) => modals[modalName].style.display = 'none';
-    
-    // --- AUTH & INIT ---
-    async function initializeFirebaseApps() {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getDatabase(app);
-    }
 
     async function fetchGithubToken() {
         try {
-            const snapshot = await get(ref(db, 'github/token'));
-            if (snapshot.exists()) {
-                githubToken = snapshot.val();
-            } else { console.error('Token GitHub tidak ditemukan di Firebase SETUP.'); }
-        } catch (e) { console.error('Gagal mengambil token GitHub:', e); }
+            const snapshot = await get(ref(dbAturan, 'github/token'));
+            if (snapshot.exists()) githubToken = snapshot.val();
+        } catch (e) { alert("Gagal mengambil token GitHub."); }
     }
 
     async function performAutoLogin() {
+        showSpinner("Login ke semua server...");
         try {
-            await signInWithEmailAndPassword(auth, "speropa@gmail.com", "Pajangan201184*");
-            console.log("Admin auto-login successful.");
-            attachDataListeners();
-        } catch (error) {
-            console.error("Admin auto-login failed:", error);
-            alert("Login admin gagal. Pastikan akun admin sudah dibuat di Project Firebase baru.");
-        } finally {
-            hideSpinner();
-        }
+            await Promise.all([signInWithEmailAndPassword(authAturan, "speropa@gmail.com", "Pajangan201184*"), signInWithEmailAndPassword(auth7, "speropa@gmail.com", "Pajangan201184*"), signInWithEmailAndPassword(auth8, "speropa@gmail.com", "Pajangan201184*"), signInWithEmailAndPassword(auth9, "speropa@gmail.com", "Pajangan201184*")]);
+            return true;
+        } catch { return false; } finally { hideSpinner(); }
     }
     
     function populateTahunAjaranDropdowns() {
-        const date = new Date();
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth();
-        let latestAcademicYearStart = (currentMonth < 6) ? currentYear - 1 : currentYear;
-        
-        const firstYear = 2024;
-        const optionsHtml = [];
-        for (let year = latestAcademicYearStart + 1; year >= firstYear; year--) {
-            const academicYearString = `${year}/${year + 1}`;
-            optionsHtml.push(`<option value="${academicYearString}">${academicYearString}</option>`);
-        }
-        
-        const latestOptionValue = `${latestAcademicYearStart}/${latestAcademicYearStart + 1}`;
-        document.getElementById('ujian-modal-ta-select').innerHTML = optionsHtml.join('');
-        document.getElementById('ujian-modal-ta-select').value = latestOptionValue;
+        const date = new Date(), cy = date.getFullYear(), cm = date.getMonth();
+        let las = (cm < 6) ? cy - 1 : cy;
+        const opts = [];
+        for (let y = las + 1; y >= 2024; y--) opts.push(`<option value="${y}/${y + 1}">${y}/${y + 1}</option>`);
+        document.getElementById('ujian-modal-ta-select').innerHTML = opts.join('');
+        document.getElementById('ujian-modal-ta-select').value = `${las}/${las + 1}`;
     }
 
-    // --- DATA FETCHING & LISTENERS ---
     function attachDataListeners() {
-        // Semua data sekarang ada di satu DB
-        onValue(ref(db, 'customMapels'), s => { state.mapels = s.val() || []; renderMapelTable(); renderAksesTable(); });
-        onValue(ref(db, 'gurus'), s => { state.gurus = s.val() || {}; renderGuruTable(); renderAksesTable(); });
-        onValue(ref(db, 'customUjians'), s => { state.ujians = s.val() || {}; renderUjianTable(); });
-        onValue(ref(db, 'akses'), s => { state.akses = s.val() || {}; renderAksesTable(); });
-        
-        // Listener Bank Soal
-        onValue(ref(db, 'ujian'), () => {
-            loadAllBankSoal();
-        });
+        onValue(ref(dbAturan, 'customMapels'), s => { state.mapels = s.val() || []; renderMapelTable(); renderAksesTable(); });
+        onValue(ref(dbAturan, 'gurus'), s => { state.gurus = s.val() || {}; renderGuruTable(); renderAksesTable(); });
+        onValue(ref(dbAturan, 'customUjians'), s => { state.ujians = s.val() || {}; renderUjianTable(); });
+        onValue(ref(dbAturan, 'akses'), s => { state.akses = s.val() || {}; renderAksesTable(); });
+        onValue(ref(db7, 'daftar_ujian'), (s) => processBankSoalSnapshot(s, '7'));
+        onValue(ref(db8, 'daftar_ujian'), (s) => processBankSoalSnapshot(s, '8'));
+        onValue(ref(db9, 'daftar_ujian'), (s) => processBankSoalSnapshot(s, '9'));
     }
 
-    async function loadAllBankSoal() {
-        const allBankSoalEntries = [];
-        try {
-            const snapshot = await get(ref(db, 'ujian'));
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                for (const thAjaran in data) {
-                    for (const ujian in data[thAjaran]) {
-                        for (const kelas in data[thAjaran][ujian]) {
-                            for (const mapel in data[thAjaran][ujian][kelas]) {
-                                const bank = data[thAjaran][ujian][kelas][mapel];
-                                allBankSoalEntries.push({
-                                    tahunAjaran: thAjaran.replace(/-/g, '/'),
-                                    ujian: ujian.replace(/-/g, ' '),
-                                    kelas: kelas.replace('Kelas-', ''),
-                                    mapel: mapel.replace(/-/g, ' '),
-                                    jmlSoal: bank.soal ? Object.keys(bank.soal).length : 0,
-                                    rawUpdateTimestamp: bank.terakhirUpdate,
-                                    updateTerakhir: new Date(bank.terakhirUpdate).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (e) {
-            console.error("Gagal mengambil data bank soal:", e);
-        }
-
-        const latestBankSoalMap = new Map();
-        for (const bank of allBankSoalEntries) {
-            const key = `${bank.tahunAjaran}-${bank.ujian}-${bank.kelas}-${bank.mapel}`;
-            const existing = latestBankSoalMap.get(key);
-            if (!existing || new Date(bank.rawUpdateTimestamp) > new Date(existing.rawUpdateTimestamp)) {
-                latestBankSoalMap.set(key, bank);
+    function processBankSoalSnapshot(snapshot, gradeKey) {
+        const entries = [];
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            for (const ta in data) for (const uj in data[ta]) for (const kl in data[ta][uj]) for (const mp in data[ta][uj][kl]) {
+                const b = data[ta][uj][kl][mp];
+                if (b) entries.push({ tahunAjaran: b.tahunAjaran || ta, ujian: b.namaUjian || uj.replace(/-/g, ' '), kelas: b.kelas || kl.replace('Kelas-', ''), mapel: b.mapel || mp.replace(/-/g, ' '), jmlSoal: b.jumlahSoal || 0, updateTerakhir: new Date(b.terakhirUpdate).toLocaleString('id-ID'), rawUpdateTimestamp: b.terakhirUpdate, keyTahun: ta, keyUjian: uj, keyKelas: kl, keyMapel: mp, originDbGrade: gradeKey });
             }
         }
-        
-        const uniqueLatestBankSoal = Array.from(latestBankSoalMap.values());
-        uniqueLatestBankSoal.sort((a, b) => {
-            const kelasCompare = a.kelas.localeCompare(b.kelas, undefined, { numeric: true });
-            if (kelasCompare !== 0) return kelasCompare;
-            return a.mapel.localeCompare(b.mapel);
-        });
-
-        state.bankSoal = uniqueLatestBankSoal;
-        renderBankSoalTable();
+        bankSoalCache[gradeKey] = entries;
+        mergeAndRenderBankSoal();
     }
-    
-    // --- RENDER FUNCTIONS ---
-    function getSortedGuruIds() {
-        return Object.keys(state.gurus).sort((a, b) => 
-            state.gurus[a].nama.localeCompare(state.gurus[b].nama)
-        );
+
+    function mergeAndRenderBankSoal() {
+        state.bankSoal = [...bankSoalCache['7'], ...bankSoalCache['8'], ...bankSoalCache['9']];
+        renderBankSoalHierarchy(); 
     }
     
     function renderMapelTable() {
-        const tbody = document.getElementById('mapel-table-body');
-        const sortedMapels = [...state.mapels].sort((a, b) => a.localeCompare(b));
-        tbody.innerHTML = sortedMapels.length ? sortedMapels.map((mapel, i) => {
-            const originalIndex = state.mapels.indexOf(mapel);
-            return `<tr><td>${i + 1}</td><td>${mapel}</td><td class="actions-cell">
-                <button onclick="window.app.editMapel(${originalIndex})" title="Edit"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button>
-                <button onclick="window.app.deleteMapel(${originalIndex})" title="Hapus"><svg class="delete-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-            </td></tr>`
-        }).join('') : `<tr><td colspan="3" class="empty-state">Belum ada mata pelajaran.</td></tr>`;
+        const tb = document.getElementById('mapel-table-body');
+        const sm = [...state.mapels].sort((a, b) => a.localeCompare(b));
+        tb.innerHTML = sm.length ? sm.map((m, i) => `<tr><td>${i + 1}</td><td>${m}</td><td class="actions-cell"><button onclick="window.app.editMapel(${state.mapels.indexOf(m)})"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button><button onclick="window.app.deleteMapel(${state.mapels.indexOf(m)})"><svg class="delete-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></td></tr>`).join('') : `<tr><td colspan="3" class="empty-state">Belum ada mata pelajaran.</td></tr>`;
     }
     
     function renderGuruTable() {
-        const tbody = document.getElementById('guru-table-body');
-        const sortedGuruIds = getSortedGuruIds();
-        tbody.innerHTML = sortedGuruIds.length ? sortedGuruIds.map((id, i) => `
-            <tr><td>${i + 1}</td><td>${state.gurus[id].nama}</td><td>${state.gurus[id].username}</td><td>******</td><td class="actions-cell">
-                <button onclick="window.app.editGuru('${id}')" title="Edit"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button>
-                <button onclick="window.app.deleteGuru('${id}')" title="Hapus"><svg class="delete-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-            </td></tr>`).join('') : `<tr><td colspan="5" class="empty-state">Belum ada guru.</td></tr>`;
+        const tb = document.getElementById('guru-table-body');
+        const sg = Object.keys(state.gurus).sort((a, b) => state.gurus[a].nama.localeCompare(state.gurus[b].nama));
+        tb.innerHTML = sg.length ? sg.map((id, i) => `<tr><td>${i + 1}</td><td>${state.gurus[id].nama}</td><td>${state.gurus[id].username}</td><td>******</td><td class="actions-cell"><button onclick="window.app.editGuru('${id}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button><button onclick="window.app.deleteGuru('${id}')"><svg class="delete-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></td></tr>`).join('') : `<tr><td colspan="5" class="empty-state">Belum ada guru.</td></tr>`;
     }
 
     function renderUjianTable() {
-        const tbody = document.getElementById('ujian-table-body');
-        const allUjians = [];
-        for (const ta in state.ujians) {
-            for (const id in state.ujians[ta]) {
-                allUjians.push({ id, ...state.ujians[ta][id], tahunAjaran: ta });
-            }
-        }
-        allUjians.sort((a, b) => {
-            const taCompare = b.tahunAjaran.localeCompare(a.tahunAjaran);
-            if (taCompare !== 0) return taCompare;
-            return a.name.localeCompare(b.name);
-        });
-        tbody.innerHTML = allUjians.length ? allUjians.map((ujian, i) => `
-            <tr><td>${i + 1}</td><td>${ujian.name}</td><td>${ujian.tahunAjaran.replace('-','/')}</td><td>
-                <label class="toggle-switch"><input type="checkbox" onchange="window.app.toggleUjianStatus('${ujian.tahunAjaran}', '${ujian.id}')" ${ujian.active ? 'checked' : ''}><span class="slider"></span></label>
-            </td><td class="actions-cell">
-                <button onclick="window.app.editUjian('${ujian.tahunAjaran}', '${ujian.id}')" title="Edit"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button>
-                <button onclick="window.app.deleteUjian('${ujian.tahunAjaran}', '${ujian.id}')" title="Hapus"><svg class="delete-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-            </td></tr>`).join('') : `<tr><td colspan="5" class="empty-state">Belum ada topik ujian.</td></tr>`;
+        const tb = document.getElementById('ujian-table-body');
+        const au = [];
+        for (const ta in state.ujians) for (const id in state.ujians[ta]) au.push({ id, ...state.ujians[ta][id], tahunAjaran: ta });
+        au.sort((a, b) => b.tahunAjaran.localeCompare(a.tahunAjaran) || a.name.localeCompare(b.name));
+        tb.innerHTML = au.length ? au.map((u, i) => `<tr><td>${i + 1}</td><td>${u.name}</td><td>${u.tahunAjaran.replace('-','/')}</td><td><label class="toggle-switch"><input type="checkbox" onchange="window.app.toggleUjianStatus('${u.tahunAjaran}', '${u.id}')" ${u.active ? 'checked' : ''}><span class="slider"></span></label></td><td class="actions-cell"><button onclick="window.app.editUjian('${u.tahunAjaran}', '${u.id}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button><button onclick="window.app.deleteUjian('${u.tahunAjaran}', '${u.id}')"><svg class="delete-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></td></tr>`).join('') : `<tr><td colspan="5" class="empty-state">Belum ada topik ujian.</td></tr>`;
     }
     
     function renderAksesTable() {
-        const tbody = document.getElementById('akses-table-body');
-        const sortedGuruIds = getSortedGuruIds();
-        
-        if (sortedGuruIds.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Belum ada data guru.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = sortedGuruIds.map((guruId, i) => {
-            const accessList = state.akses[guruId] || [];
-            accessList.sort((a,b) => a.kelas - b.kelas || a.mapel.localeCompare(b.mapel));
-            
-            const accessBadges = accessList.length > 0
-                ? accessList.map(a => `<span class="akses-tag">Kelas ${a.kelas}: ${a.mapel}</span>`).join(' ')
-                : '<span style="color: #95a5a6; font-style: italic;">Belum ada akses</span>';
-
-            return `
-                <tr>
-                    <td>${i + 1}</td>
-                    <td><strong>${state.gurus[guruId].nama}</strong></td>
-                    <td style="white-space: normal;">${accessBadges}</td>
-                    <td class="actions-cell">
-                        <button onclick="window.app.editAksesGuru('${guruId}')" title="Edit Akses"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button>
-                    </td>
-                </tr>
-            `;
-        }).join('');
+        const tb = document.getElementById('akses-table-body');
+        const sg = Object.keys(state.gurus).sort((a, b) => state.gurus[a].nama.localeCompare(state.gurus[b].nama));
+        tb.innerHTML = sg.length ? sg.map((gid, i) => {
+            const al = state.akses[gid] || [];
+            al.sort((a,b) => a.kelas - b.kelas || a.mapel.localeCompare(b.mapel));
+            return `<tr><td>${i + 1}</td><td><strong>${state.gurus[gid].nama}</strong></td><td style="white-space: normal;">${al.length ? al.map(a => `<span class="akses-tag">Kelas ${a.kelas}: ${a.mapel}</span>`).join(' ') : '<span style="color: #95a5a6; font-style: italic;">Belum ada akses</span>'}</td><td class="actions-cell"><button onclick="window.app.editAksesGuru('${gid}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg></button></td></tr>`;
+        }).join('') : `<tr><td colspan="4" class="empty-state">Belum ada data guru.</td></tr>`;
     }
 
-    // Modal Helper for Access
-    window.app = window.app || {};
-    window.app.editAksesGuru = (guruId) => {
-        document.getElementById('akses-guru-id').value = guruId;
-        document.getElementById('akses-modal-title').textContent = `Atur Akses - ${state.gurus[guruId].nama}`;
-        tempAccessList = JSON.parse(JSON.stringify(state.akses[guruId] || []));
-        if (tempAccessList.length === 0) {
-            tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
-        }
-        renderModalAccessList();
-        openModal('akses');
+    function renderBankSoalHierarchy() {
+        const c = document.getElementById('bank-soal-hierarchy');
+        c.innerHTML = '';
+        if (state.bankSoal.length === 0) { c.innerHTML = `<div class="empty-state">Tidak ada data bank soal.</div>`; return; }
+        const g = {};
+        state.bankSoal.forEach(i => {
+            if (!g[i.tahunAjaran]) g[i.tahunAjaran] = {};
+            if (!g[i.tahunAjaran][i.ujian]) g[i.tahunAjaran][i.ujian] = {};
+            if (!g[i.tahunAjaran][i.ujian][i.kelas]) g[i.tahunAjaran][i.ujian][i.kelas] = [];
+            g[i.tahunAjaran][i.ujian][i.kelas].push(i);
+        });
+
+        Object.keys(g).sort().reverse().forEach(ta => {
+            const d1 = document.createElement('div'); d1.className = 'accordion-item level-1';
+            d1.innerHTML = `<div class="accordion-header level-1-header" onclick="window.app.toggleAccordion(this)"><div class="accordion-title-wrapper"><div class="accordion-title"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>${ta}</div><button class="btn-danger-sm" onclick="event.stopPropagation(); window.app.deleteHierarchy('tahun', '${ta}')" title="Hapus Tahun"><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div><div class="accordion-content"><div class="level-2-wrapper"></div></div>`;
+            const w2 = d1.querySelector('.level-2-wrapper');
+            
+            Object.keys(g[ta]).sort().forEach(uj => {
+                const d2 = document.createElement('div'); d2.className = 'accordion-item level-2';
+                d2.innerHTML = `<div class="accordion-header level-2-header" onclick="window.app.toggleAccordion(this)"><div class="accordion-title-wrapper"><div class="accordion-title"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>${uj}</div><button class="btn-danger-sm" onclick="event.stopPropagation(); window.app.deleteHierarchy('ujian', '${ta}', '${uj}')" title="Hapus Ujian"><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div><div class="accordion-content"><div class="level-3-wrapper"></div></div>`;
+                const w3 = d2.querySelector('.level-3-wrapper');
+
+                Object.keys(g[ta][uj]).sort((a,b) => a.localeCompare(b, undefined, {numeric: true})).forEach(kl => {
+                    const d3 = document.createElement('div'); d3.className = 'accordion-item level-3';
+                    const ml = g[ta][uj][kl];
+                    ml.sort((a,b) => a.mapel.localeCompare(b.mapel));
+                    let gh = `<div class="mapel-grid">`;
+                    ml.forEach(i => {
+                        gh += `<div class="mapel-card"><div class="mapel-info"><h4>${i.mapel}</h4><div class="mapel-meta"><span class="badge-count">${i.jmlSoal} Soal</span><span><small>${i.updateTerakhir}</small></span></div></div><button class="btn-danger" style="padding: 6px; border-radius: 6px; border:none; cursor:pointer;" onclick='window.app.deleteBankSoal(${JSON.stringify(i)})'><svg style="width:18px;height:18px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div>`;
+                    });
+                    gh += `</div>`;
+                    d3.innerHTML = `<div class="accordion-header level-3-header" onclick="window.app.toggleAccordion(this)"><div class="accordion-title-wrapper"><div class="accordion-title" style="font-size: 0.95rem;"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>Kelas ${kl}</div><button class="btn-danger-sm" onclick="event.stopPropagation(); window.app.deleteHierarchy('kelas', '${ta}', '${uj}', '${kl}')" title="Hapus Kelas"><svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div><div class="accordion-content">${gh}</div>`;
+                    w3.appendChild(d3);
+                });
+                w2.appendChild(d2);
+            });
+            c.appendChild(d1);
+        });
+    }
+
+    window.app.toggleAccordion = (h) => {
+        h.parentElement.classList.toggle('active');
+        h.nextElementSibling.classList.toggle('open');
+    };
+
+    window.app.deleteHierarchy = (level, ta, ujian = null, kelas = null) => {
+        let msg = "", ctx = {};
+        if (level === 'tahun') { msg = `Hapus Tahun "${ta}" dan SEMUA datanya?`; ctx = { ta }; }
+        else if (level === 'ujian') { msg = `Hapus Ujian "${ujian}" (${ta}) dan seluruh kelasnya?`; ctx = { ta, ujian }; }
+        else if (level === 'kelas') { msg = `Hapus Kelas ${kelas} pada ujian "${ujian}" (${ta})?`; ctx = { ta, ujian, kelas }; }
+        showConfirmation('Hapus Data', msg, () => executeDeleteHierarchy(level, ctx));
+    };
+
+    async function executeDeleteHierarchy(level, ctx) {
+        showProcessing('Menghapus massal...');
+        if (!githubToken) { alert('Token GitHub invalid.'); hideProcessing(); return; }
+        try {
+            const sta = ctx.ta.replace(/[\.\#\$\[\]\/]/g, '-'), suj = ctx.ujian ? ctx.ujian.replace(/\s+/g, '-') : null, skl = ctx.kelas ? `Kelas-${ctx.kelas}` : null;
+            let dbs = (level === 'kelas') ? [getDbForGrade(ctx.kelas)].filter(Boolean) : [db7, db8, db9];
+            let fps = [], ghp = "";
+            if (level === 'tahun') { fps = [`daftar_ujian/${ctx.ta}`, `ujian/${ctx.ta}`]; ghp = `${sta}`; }
+            else if (level === 'ujian') { fps = [`daftar_ujian/${ctx.ta}/${suj}`, `ujian/${ctx.ta}/${suj}`]; ghp = `${sta}/${suj}`; }
+            else { fps = [`daftar_ujian/${ctx.ta}/${suj}/${skl}`, `ujian/${ctx.ta}/${suj}/${skl}`]; ghp = `${sta}/${suj}/${skl}`; }
+            
+            await recursiveDeleteGithubFolder(ghp);
+            await Promise.all(dbs.flatMap(db => fps.map(p => remove(ref(db, p)))));
+            alert('Penghapusan selesai.');
+        } catch (e) { alert(`Error: ${e.message}`); } finally { hideProcessing(); }
+    }
+
+    async function recursiveDeleteGithubFolder(path) {
+        try {
+            const r = await fetch(`https://api.github.com/repos/speropa/gambarbanksoal/contents/${path}`, { headers: { 'Authorization': `token ${githubToken}` } });
+            if (r.ok) {
+                const i = await r.json();
+                if (Array.isArray(i)) for (const x of i) {
+                    if (x.type === 'dir') await recursiveDeleteGithubFolder(x.path);
+                    else await fetch(x.url, { method: 'DELETE', headers: { 'Authorization': `token ${githubToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Del: ${x.name}`, sha: x.sha }) });
+                }
+            }
+        } catch (e) {}
+    }
+
+    window.app.editAksesGuru = (gid) => {
+        document.getElementById('akses-guru-id').value = gid;
+        document.getElementById('akses-modal-title').textContent = `Akses - ${state.gurus[gid].nama}`;
+        tempAccessList = JSON.parse(JSON.stringify(state.akses[gid] || []));
+        if (!tempAccessList.length) tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
+        renderModalAccessList(); openModal('akses');
     };
     
     function renderModalAccessList() {
-        const container = document.getElementById('dynamic-access-list');
-        const mapelOptions = state.mapels.map(m => `<option value="${m}">${m}</option>`).join('');
-        
-        container.innerHTML = tempAccessList.map((item, idx) => {
-            const showDelete = idx > 0;
-            return `
-            <div class="dynamic-access-row">
-                <div class="form-group" style="flex: 0 0 auto; width: 80px;">
-                    <label class="text-xs uppercase font-bold" style="color: #3498db;">Kelas</label>
-                    <select class="form-control" style="text-align: center; padding-left: 5px; padding-right: 5px;"
-                        onchange="window.app.updateAccessRow(${idx}, 'kelas', this.value)">
-                        <option value="7" ${item.kelas === '7' ? 'selected' : ''}>7</option>
-                        <option value="8" ${item.kelas === '8' ? 'selected' : ''}>8</option>
-                        <option value="9" ${item.kelas === '9' ? 'selected' : ''}>9</option>
-                    </select>
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label class="text-xs uppercase font-bold" style="color: #3498db;">Mata Pelajaran</label>
-                    <select class="form-control"
-                        onchange="window.app.updateAccessRow(${idx}, 'mapel', this.value)">
-                        ${state.mapels.map(m => `<option value="${m}" ${item.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}
-                    </select>
-                </div>
-                ${showDelete ? `
-                <button type="button" class="remove-row-btn" onclick="window.app.removeTempAccess(${idx})" title="Hapus Baris">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>` : '<div style="width: 42px;"></div>'}
-            </div>
-        `}).join('');
+        document.getElementById('dynamic-access-list').innerHTML = tempAccessList.map((it, i) => `<div class="dynamic-access-row"><div class="form-group" style="flex:0 0 auto;width:80px;"><label class="text-xs uppercase font-bold" style="color:#3498db;">Kelas</label><select class="form-control" style="text-align:center;" onchange="window.app.updateAccessRow(${i},'kelas',this.value)"><option value="7" ${it.kelas==='7'?'selected':''}>7</option><option value="8" ${it.kelas==='8'?'selected':''}>8</option><option value="9" ${it.kelas==='9'?'selected':''}>9</option></select></div><div class="form-group" style="flex:1;"><label class="text-xs uppercase font-bold" style="color:#3498db;">Mata Pelajaran</label><select class="form-control" onchange="window.app.updateAccessRow(${i},'mapel',this.value)">${state.mapels.map(m=>`<option value="${m}" ${it.mapel===m?'selected':''}>${m}</option>`).join('')}</select></div>${i>0?`<button type="button" class="remove-row-btn" onclick="window.app.removeTempAccess(${i})"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>`:'<div style="width:42px;"></div>'}</div>`).join('');
     }
     
-    window.app.updateAccessRow = (index, field, value) => {
-        if (tempAccessList[index]) tempAccessList[index][field] = value;
-    };
-    
-    window.app.addTempAccessRow = () => {
-        tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' });
-        renderModalAccessList();
-    };
-
-    window.app.removeTempAccess = (index) => {
-        tempAccessList.splice(index, 1);
-        renderModalAccessList();
-    };
+    window.app.updateAccessRow = (i, f, v) => { if(tempAccessList[i]) tempAccessList[i][f] = v; };
+    window.app.addTempAccessRow = () => { tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' }); renderModalAccessList(); };
+    window.app.removeTempAccess = (i) => { tempAccessList.splice(i, 1); renderModalAccessList(); };
     
     document.getElementById('akses-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        showProcessing("Menyimpan akses...");
-        const guruId = document.getElementById('akses-guru-id').value;
-        const validList = tempAccessList.filter(item => item.mapel && item.mapel.trim() !== '');
-        try {
-            await set(ref(db, `akses/${guruId}`), validList);
-            closeModal('akses');
-        } catch (err) {
-            console.error("Gagal menyimpan akses:", err);
-            alert("Terjadi kesalahan saat menyimpan data.");
-        } finally {
-            hideProcessing();
-        }
+        e.preventDefault(); showProcessing("Menyimpan...");
+        try { await set(ref(dbAturan, `akses/${document.getElementById('akses-guru-id').value}`), tempAccessList.filter(i => i.mapel)); closeModal('akses'); } catch { alert("Gagal."); } finally { hideProcessing(); }
     });
-    
-    function renderBankSoalTable() {
-        const tbody = document.getElementById('bank-soal-table-body');
-        tbody.innerHTML = state.bankSoal.length ? state.bankSoal.map(bank => `
-            <tr>
-                <td>${bank.tahunAjaran}</td>
-                <td>${bank.ujian}</td>
-                <td>${bank.kelas}</td>
-                <td>${bank.mapel}</td>
-                <td>${bank.jmlSoal}</td>
-                <td>${bank.updateTerakhir}</td>
-                <td class="actions-cell">
-                    <button onclick='window.app.previewBankSoal(${JSON.stringify(bank)})' title="Preview Soal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
-                    <button class="delete-btn" onclick='window.app.deleteBankSoal(${JSON.stringify(bank)})' title="Hapus Bank Soal"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                </td>
-            </tr>
-        `).join('') : `<tr><td colspan="7" class="empty-state">Tidak ada data bank soal yang ditemukan.</td></tr>`;
-    }
 
-    function showConfirmation(title, text, onConfirm) {
-        document.getElementById('confirm-title').textContent = title;
-        document.getElementById('confirm-text').textContent = text;
-        document.getElementById('confirm-ok').onclick = () => {
-            closeModal('confirm');
-            onConfirm();
-        };
-        openModal('confirm');
-    }
+    function showConfirmation(t, x, c) { document.getElementById('confirm-title').textContent = t; document.getElementById('confirm-text').textContent = x; document.getElementById('confirm-ok').onclick = () => { closeModal('confirm'); c(); }; openModal('confirm'); }
 
-    // Helper for setup DB - Keep it simple as 'db'
-    const setupDb = () => db;
-
-    // Append other window.app functions
     Object.assign(window.app, {
-        editMapel: (index) => { document.getElementById('mapel-form').dataset.id = index; document.getElementById('mapel-name').value = state.mapels[index]; openModal('mapel'); },
-        deleteMapel: (index) => showConfirmation('Hapus Mapel', `Yakin ingin menghapus mapel "${state.mapels[index]}"?`, async () => { showSpinner(); let updatedMapels = [...state.mapels]; updatedMapels.splice(index, 1); await set(ref(db, 'customMapels'), updatedMapels); hideSpinner(); }),
-        emptyMapel: () => showConfirmation('Kosongkan Mapel', 'Yakin ingin mengosongkan SEMUA data mata pelajaran? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); await remove(ref(db, 'customMapels')); hideSpinner(); }),
-        editGuru: (id) => { const guru = state.gurus[id]; const form = document.getElementById('guru-form'); form.dataset.id = id; form.querySelector('#guru-nama').value = guru.nama; form.querySelector('#guru-username').value = guru.username; form.querySelector('#guru-password').value = guru.password; openModal('guru'); },
-        deleteGuru: (id) => showConfirmation('Hapus Guru', `Yakin ingin menghapus guru "${state.gurus[id].nama}"? Ini juga akan menghapus aksesnya.`, async () => { showSpinner(); await remove(ref(db, `gurus/${id}`)); await remove(ref(db, `akses/${id}`)); hideSpinner(); }),
-        emptyGuru: () => showConfirmation('Kosongkan Guru', 'Yakin ingin mengosongkan SEMUA data guru dan aksesnya? Tindakan ini tidak dapat dibatalkan.', async () => { showSpinner(); await Promise.all([remove(ref(db, 'gurus')), remove(ref(db, 'akses'))]); hideSpinner(); }),
-        editUjian: (tahunAjaran, id) => { const ujian = state.ujians[tahunAjaran][id]; const form = document.getElementById('ujian-form'); form.dataset.id = id; form.querySelector('#ujian-name').value = ujian.name; document.getElementById('ujian-modal-ta-select').value = tahunAjaran.replace('-','/'); openModal('ujian'); },
-        deleteUjian: (tahunAjaran, id) => showConfirmation('Hapus Ujian', `Yakin ingin menghapus topik ujian "${state.ujians[tahunAjaran][id].name}"?`, async () => { showSpinner(); await remove(ref(db, `customUjians/${tahunAjaran}/${id}`)); hideSpinner(); }),
-        toggleUjianStatus: async (tahunAjaran, id) => { const currentStatus = state.ujians[tahunAjaran][id].active; await update(ref(db, `customUjians/${tahunAjaran}/${id}`), { active: !currentStatus }); },
-        
-        previewBankSoal: async (bank) => {
-            showProcessing('Memuat data soal...');
-            const dbPath = `ujian/${bank.tahunAjaran.replace('/','-')}/${bank.ujian.replace(/\s/g,'-')}/Kelas-${bank.kelas}/${bank.mapel.replace(/\s/g,'-')}`;
-            
-            try {
-                const snapshot = await get(ref(db, dbPath));
-                if (snapshot.exists() && snapshot.val().soal) {
-                    const soalData = snapshot.val().soal;
-                    const previewContainer = document.getElementById('preview-screen');
-                    previewContainer.innerHTML = '';
-                    
-                    Object.keys(soalData).sort((a,b) => parseInt(a) - parseInt(b)).forEach(nomor => {
-                        const s = soalData[nomor];
-                        const optionLabels = ['A', 'B', 'C', 'D'];
-                        const optionsHTML = [s.pilihanA, s.pilihanB, s.pilihanC, s.pilihanD].map((opt, index) => `
-                            <div class="preview-option-item">
-                                <button class="option-letter">${optionLabels[index]}</button>
-                                <div class="option-text">${opt}</div>
-                            </div>
-                        `).join('');
-
-                        const item = document.createElement('div');
-                        item.className = 'preview-soal-item';
-                        item.innerHTML = `
-                            <h3>Soal No. ${nomor}</h3>
-                            <div class="pertanyaan">${s.pertanyaan}</div>
-                            <div class="options">${optionsHTML}</div>
-                        `;
-                        previewContainer.appendChild(item);
-                    });
-                    openModal('preview');
-                } else {
-                    alert('Tidak ada data soal untuk ditampilkan.');
-                }
-            } catch (e) {
-                console.error("Gagal memuat preview:", e);
-                alert("Gagal memuat data soal untuk preview.");
-            } finally {
-                hideProcessing();
-            }
-        },
-        deleteBankSoal: (bank) => {
-            showConfirmation('Hapus Bank Soal', `Yakin ingin menghapus bank soal untuk:\nMapel: ${bank.mapel}, Kelas: ${bank.kelas}, Ujian: ${bank.ujian}?\nTindakan ini akan menghapus data soal dan semua gambar terkait. TIDAK DAPAT DIBATALKAN.`, () => executeDeleteBankSoal(bank));
-        }
+        editMapel: (i) => { document.getElementById('mapel-form').dataset.id = i; document.getElementById('mapel-name').value = state.mapels[i]; openModal('mapel'); },
+        deleteMapel: (i) => showConfirmation('Hapus Mapel', `Hapus "${state.mapels[i]}"?`, async () => { showSpinner(); let u = [...state.mapels]; u.splice(i, 1); await set(ref(dbAturan, 'customMapels'), u); hideSpinner(); }),
+        emptyMapel: () => showConfirmation('Kosongkan', 'Hapus semua mapel?', async () => { showSpinner(); await remove(ref(dbAturan, 'customMapels')); hideSpinner(); }),
+        editGuru: (id) => { const g = state.gurus[id]; const f = document.getElementById('guru-form'); f.dataset.id = id; f.querySelector('#guru-nama').value = g.nama; f.querySelector('#guru-username').value = g.username; f.querySelector('#guru-password').value = g.password; openModal('guru'); },
+        deleteGuru: (id) => showConfirmation('Hapus Guru', `Hapus "${state.gurus[id].nama}"?`, async () => { showSpinner(); await remove(ref(dbAturan, `gurus/${id}`)); await remove(ref(dbAturan, `akses/${id}`)); hideSpinner(); }),
+        emptyGuru: () => showConfirmation('Kosongkan', 'Hapus semua guru?', async () => { showSpinner(); await Promise.all([remove(ref(dbAturan, 'gurus')), remove(ref(dbAturan, 'akses'))]); hideSpinner(); }),
+        editUjian: (ta, id) => { const u = state.ujians[ta][id]; const f = document.getElementById('ujian-form'); f.dataset.id = id; f.querySelector('#ujian-name').value = u.name; document.getElementById('ujian-modal-ta-select').value = ta.replace('-','/'); openModal('ujian'); },
+        deleteUjian: (ta, id) => showConfirmation('Hapus Topik', `Hapus "${state.ujians[ta][id].name}"?`, async () => { showSpinner(); await remove(ref(dbAturan, `customUjians/${ta}/${id}`)); hideSpinner(); }),
+        toggleUjianStatus: async (ta, id) => { await update(ref(dbAturan, `customUjians/${ta}/${id}`), { active: !state.ujians[ta][id].active }); },
+        deleteBankSoal: (b) => { showConfirmation('Hapus Bank Soal', `Hapus ${b.mapel} (${b.kelas})?`, () => executeDeleteBankSoal(b)); }
     });
 
-    async function executeDeleteBankSoal(bank) {
-        showProcessing('Memulai proses penghapusan...');
-        if (!githubToken) {
-            alert('Token GitHub tidak valid atau tidak ditemukan. Proses penghapusan gambar dibatalkan.');
-            hideProcessing();
-            return;
-        }
-
+    async function executeDeleteBankSoal(b) {
+        showProcessing('Menghapus...');
+        if (!githubToken) { alert('Token invalid.'); hideProcessing(); return; }
         try {
-            // 1. Hapus Gambar dari GitHub
-            const GITHUB_USERNAME = "speropa";
-            const GITHUB_REPO = "gambarbanksoal";
-            const safeTA = bank.tahunAjaran.replace('/', '-');
-            const safeUjian = bank.ujian.replace(/\s/g, '-');
-            const safeMapel = bank.mapel.replace(/\s/g, '-');
-            const dirPath = `${safeTA}/${safeUjian}/Kelas-${bank.kelas}/${safeMapel}`;
-
-            processingText.textContent = 'Mengambil daftar gambar...';
-            const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${dirPath}`, {
-                headers: { 'Authorization': `token ${githubToken}` }
-            });
-
-            if (response.ok) {
-                const files = await response.json();
-                if (Array.isArray(files)) {
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        processingText.textContent = `Menghapus gambar (${i + 1}/${files.length})...`;
-                        await fetch(file.url, {
-                            method: 'DELETE',
-                            headers: { 'Authorization': `token ${githubToken}`, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ message: `Menghapus gambar: ${file.name}`, sha: file.sha })
-                        });
-                    }
-                }
-            } else if(response.status !== 404) {
-                 console.warn(`Gagal mengambil folder dari GitHub (mungkin sudah kosong): ${response.statusText}`);
-            }
-
-            // 2. Hapus data dari Firebase
-            processingText.textContent = 'Menghapus data dari server...';
-            const dbPath = `ujian/${safeTA}/${safeUjian}/Kelas-${bank.kelas}/${safeMapel}`;
-            
-            await remove(ref(db, dbPath));
-
-            alert('Bank soal dan gambar terkait berhasil dihapus.');
-
-        } catch (e) {
-            console.error("Gagal menghapus bank soal:", e);
-            alert(`Terjadi kesalahan saat menghapus: ${e.message}`);
-        } finally {
-            hideProcessing();
-        }
+            const td = getDbForGrade(b.kelas), sta = b.keyTahun.replace(/[\.\#\$\[\]\/]/g, '-'), suj = b.keyUjian, skl = b.keyKelas, smp = b.keyMapel, dp = `${sta}/${suj}/${skl}/${smp}`;
+            await recursiveDeleteGithubFolder(dp);
+            await Promise.all([remove(ref(td, `daftar_ujian/${b.keyTahun}/${suj}/${skl}/${smp}`)), remove(ref(td, `ujian/${b.keyTahun}/${suj}/${skl}/${smp}`))]);
+            alert('Dihapus.');
+        } catch (e) { alert(`Error: ${e.message}`); } finally { hideProcessing(); }
     }
 
-    document.getElementById('mapel-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const name = document.getElementById('mapel-name').value.trim(); let updatedMapels = [...state.mapels]; if (id) { updatedMapels[id] = name; } else { updatedMapels.push(name); } await set(ref(db, 'customMapels'), updatedMapels); closeModal('mapel'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
-    document.getElementById('guru-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const guruData = { nama: document.getElementById('guru-nama').value, username: document.getElementById('guru-username').value, password: document.getElementById('guru-password').value, }; const targetRef = id ? ref(db, `gurus/${id}`) : push(ref(db, 'gurus')); await set(targetRef, guruData); closeModal('guru'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
-    document.getElementById('ujian-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id; const tahunAjaran = document.getElementById('ujian-modal-ta-select').value.replace('/', '-'); const ujianData = { name: document.getElementById('ujian-name').value, active: id && state.ujians[tahunAjaran] && state.ujians[tahunAjaran][id] ? state.ujians[tahunAjaran][id].active : true, }; const targetRef = id ? ref(db, `customUjians/${tahunAjaran}/${id}`) : push(ref(db, `customUjians/${tahunAjaran}`)); await set(targetRef, ujianData); closeModal('ujian'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
+    document.getElementById('mapel-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id, n = document.getElementById('mapel-name').value.trim(); let u = [...state.mapels]; if (id) u[id] = n; else u.push(n); await set(ref(dbAturan, 'customMapels'), u); closeModal('mapel'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
+    document.getElementById('guru-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id, d = { nama: document.getElementById('guru-nama').value, username: document.getElementById('guru-username').value, password: document.getElementById('guru-password').value }; const tr = id ? ref(dbAturan, `gurus/${id}`) : push(ref(dbAturan, 'gurus')); await set(tr, d); closeModal('guru'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
+    document.getElementById('ujian-form').addEventListener('submit', async (e) => { e.preventDefault(); showSpinner(); const id = e.target.dataset.id, ta = document.getElementById('ujian-modal-ta-select').value.replace('/', '-'), d = { name: document.getElementById('ujian-name').value, active: id && state.ujians[ta] && state.ujians[ta][id] ? state.ujians[ta][id].active : true }; const tr = id ? ref(dbAturan, `customUjians/${ta}/${id}`) : push(ref(dbAturan, `customUjians/${ta}`)); await set(tr, d); closeModal('ujian'); e.target.reset(); delete e.target.dataset.id; hideSpinner(); });
     
     document.getElementById('upload-csv-btn').addEventListener('click', () => document.getElementById('csv-upload').click());
-    document.getElementById('csv-upload').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; Papa.parse(file, { header: false, skipEmptyLines: true, complete: async (results) => { showSpinner(); const newGurus = {}; for(let i = 1; i < results.data.length; i++) { const row = results.data[i]; if (row.length >= 4) { const guruData = { nama: row[1], username: row[2], password: row[3] }; const newGuruRef = push(ref(db, 'gurus')); newGurus[newGuruRef.key] = guruData; } } await update(ref(db, 'gurus'), newGurus); e.target.value = ''; hideSpinner(); alert(`${Object.keys(newGurus).length} guru berhasil ditambahkan.`); } }); });
+    document.getElementById('csv-upload').addEventListener('change', (e) => { const f = e.target.files[0]; if (!f) return; Papa.parse(f, { header: false, skipEmptyLines: true, complete: async (r) => { showSpinner(); const ng = {}; for(let i = 1; i < r.data.length; i++) { const rw = r.data[i]; if (rw.length >= 4) { const gd = { nama: rw[1], username: rw[2], password: rw[3] }; ng[push(ref(dbAturan, 'gurus')).key] = gd; } } await update(ref(dbAturan, 'gurus'), ng); e.target.value = ''; hideSpinner(); alert('Selesai.'); } }); });
 
     document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id.replace('-modal', '')); }));
-    document.querySelectorAll('.close-btn, .modal-cancel-btn').forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay').id.replace('-modal', ''))));
+    document.querySelectorAll('.close-btn, .modal-cancel-btn').forEach(b => b.addEventListener('click', () => closeModal(b.closest('.modal-overlay').id.replace('-modal', ''))));
     
     document.getElementById('add-mapel-btn').addEventListener('click', () => { document.getElementById('mapel-form').reset(); delete document.getElementById('mapel-form').dataset.id; openModal('mapel'); });
     document.getElementById('empty-mapel-btn').addEventListener('click', () => window.app.emptyMapel());
     document.getElementById('add-guru-btn').addEventListener('click', () => { document.getElementById('guru-form').reset(); delete document.getElementById('guru-form').dataset.id; openModal('guru'); });
     document.getElementById('empty-guru-btn').addEventListener('click', () => window.app.emptyGuru());
-    document.getElementById('add-ujian-btn').addEventListener('click', () => { const form = document.getElementById('ujian-form'); form.reset(); delete form.dataset.id; document.getElementById('ujian-modal-ta-select').value = document.getElementById('ujian-modal-ta-select').options[0].value; openModal('ujian'); });
+    document.getElementById('add-ujian-btn').addEventListener('click', () => { const f = document.getElementById('ujian-form'); f.reset(); delete f.dataset.id; document.getElementById('ujian-modal-ta-select').value = document.getElementById('ujian-modal-ta-select').options[0].value; openModal('ujian'); });
     
-    // Preview Modal Logic
-    const previewDeviceWrapper = document.getElementById('preview-device-wrapper');
-    const previewMobileBtn = document.getElementById('preview-mobile-btn');
-    const previewDesktopBtn = document.getElementById('preview-desktop-btn');
-    document.getElementById('preview-close-btn').addEventListener('click', () => closeModal('preview'));
-    previewMobileBtn.addEventListener('click', () => { previewDeviceWrapper.classList.add('is-mobile'); previewDeviceWrapper.classList.remove('is-desktop'); previewMobileBtn.classList.add('active'); previewMobileBtn.classList.remove('btn-secondary'); previewDesktopBtn.classList.remove('active'); previewDesktopBtn.classList.add('btn-secondary'); });
-    previewDesktopBtn.addEventListener('click', () => { previewDeviceWrapper.classList.add('is-desktop'); previewDeviceWrapper.classList.remove('is-mobile'); previewDesktopBtn.classList.add('active'); previewDesktopBtn.classList.remove('btn-secondary'); previewMobileBtn.classList.remove('active'); previewMobileBtn.classList.add('btn-secondary'); });
-
-
-    window.addEventListener('hashchange', navigate);
-    function navigate() {
-        const hash = window.location.hash || '#mata-pelajaran';
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === hash));
-        document.querySelectorAll('.content-view').forEach(v => v.classList.toggle('active', v.id === `${hash.substring(1)}-view`));
+    window.addEventListener('hashchange', n);
+    function n() {
+        const h = window.location.hash || '#mata-pelajaran';
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === h));
+        document.querySelectorAll('.content-view').forEach(v => v.classList.toggle('active', v.id === `${h.substring(1)}-view`));
     }
 
-    async function initializeAppAndLogin() {
-        showSpinner();
+    async function init() {
         populateTahunAjaranDropdowns();
-        await initializeFirebaseApps();
-        await performAutoLogin();
-        await fetchGithubToken();
-        navigate();
+        const l = await performAutoLogin();
+        if (l) { await fetchGithubToken(); attachDataListeners(); } else { hideSpinner(); }
+        n();
     }
-
-    document.addEventListener('DOMContentLoaded', initializeAppAndLogin);
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
