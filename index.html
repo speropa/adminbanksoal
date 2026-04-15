@@ -495,7 +495,19 @@
     }
     
     window.app.updateAccessRow = (i, f, v) => { if(tempAccessList[i]) tempAccessList[i][f] = v; };
-    window.app.addTempAccessRow = () => { tempAccessList.push({ kelas: '7', mapel: state.mapels[0] || '' }); renderModalAccessList(); };
+    window.app.addTempAccessRow = () => { 
+        let nextKelas = '7', nextMapel = state.mapels[0] || '';
+        if (tempAccessList.length > 0) {
+            const lastEntry = tempAccessList[tempAccessList.length - 1];
+            nextKelas = lastEntry.kelas;
+            const lastMapelIndex = state.mapels.indexOf(lastEntry.mapel);
+            if (lastMapelIndex !== -1 && state.mapels.length > 0) {
+                nextMapel = state.mapels[(lastMapelIndex + 1) % state.mapels.length];
+            }
+        }
+        tempAccessList.push({ kelas: nextKelas, mapel: nextMapel }); 
+        renderModalAccessList(); 
+    };
     window.app.removeTempAccess = (i) => { tempAccessList.splice(i, 1); renderModalAccessList(); };
     
     document.getElementById('akses-form').addEventListener('submit', async (e) => {
